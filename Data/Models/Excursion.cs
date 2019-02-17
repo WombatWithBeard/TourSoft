@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore.Design;
-using ToursSoft.Data.Models.Models.Users;
+using ToursSoft.Data.Models.Users;
 
-namespace ToursSoft.Data.Models.Models
+namespace ToursSoft.Data.Models
 {
     public class Excursion: Model
     {

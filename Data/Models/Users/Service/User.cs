@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity.UI.Pages.Account.Manage.Internal;
-using ToursSoft.Data.Models.Models;
+using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
     public abstract class User: Model
     {
-        protected User(Guid id = default(Guid), string name = null, string company = null, int phoneNumber = 0, bool isAdmin = false) : base(id)
+        protected User(Guid id, string name, string company, int phoneNumber, bool isAdmin) : base(id)
         {
             Name = name;
             Company = company;
@@ -23,8 +23,9 @@ namespace ToursSoft.Data.Models
         public string Name { get; set; }
         
         /// <summary>
-        /// 
+        /// info about company name
         /// </summary>
+        /// 
         public string Company { get; set; }
 
         /// <summary>

@@ -1,7 +1,32 @@
-namespace ToursSoft.Data.Models.Models
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace ToursSoft.Data.Models
 {
     public class Tour: Model
     {
-        //TO DO:
+        public Tour(Guid id, string name, int capacity, string description) : base(id)
+        {
+            Name = name;
+            Capacity = capacity;
+            Description = description;
+        }
+
+        /// <summary>
+        /// Info about name of the tour
+        /// </summary>
+        [Required]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Info about tour persons capacity
+        /// </summary>
+        [Required]
+        public int Capacity { get; set; }
+
+        /// <summary>
+        /// Info about tour
+        /// </summary>
+        public string Description { get; set; }
     }
 }
