@@ -19,6 +19,6 @@ namespace ToursSoft.Data.Models.Users
         public override void ExcursionRegistration(Person person, Guid ExcursionId)
         {
             throw new NotImplementedException();
-        }
+        } 
     }
 }
