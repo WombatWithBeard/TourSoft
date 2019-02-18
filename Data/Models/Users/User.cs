@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity.UI.Pages.Account.Manage.Internal;
+using ToursSoft.Data.Interface;
 using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
-    public abstract class User: Model
+    public class User: Model, IExcursionViewing, IExcursionRegistration
     {
         protected User(Guid id, string name, string company, int phoneNumber, bool isAdmin) : base(id)
         {
@@ -42,11 +43,17 @@ namespace ToursSoft.Data.Models
         /// <summary>
         /// Просмотр экскурсий
         /// </summary>
-        public abstract Dictionary<DateTime, Excursion> ExcursionViewing();
+        public Dictionary<DateTime, Excursion> ExcursionViewing()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Регистрация на экскурсию
         /// </summary>
-        public abstract void ExcursionRegistration(Person person, Guid ExcursionId);
+        public void ExcursionRegistration(Person person, Guid ExcursionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

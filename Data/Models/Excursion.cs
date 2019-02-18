@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore.Design;
-using ToursSoft.Data.Models.Users;
+using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
