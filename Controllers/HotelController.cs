@@ -9,12 +9,13 @@ using ToursSoft.Data.Models.Contexts;
 
 namespace ToursSoft.Controllers
 {
+    [Route("api/[controller]")]
     public class HotelController : Controller
     {
         private DataContext _context;
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] object o)
+        public IActionResult Add([FromBody] object o)
         {
             try
             {
@@ -36,7 +37,7 @@ namespace ToursSoft.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             using (_context = new DataContext())
             {

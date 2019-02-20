@@ -15,7 +15,7 @@ namespace ToursSoft.Controllers
         private DataContext _context;
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] object o)
+        public IActionResult Add([FromBody] object o)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace ToursSoft.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             using (_context = new DataContext())
             {
