@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using ToursSoft.Data.Interface;
 
 namespace ToursSoft.Data.Models
@@ -26,6 +27,7 @@ namespace ToursSoft.Data.Models
         /// <summary>
         /// Entity Id
         /// </summary>
+        [Key]
         public Guid Id { get; set; }
     }
 }

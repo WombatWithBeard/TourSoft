@@ -16,15 +16,26 @@ namespace ToursSoft.Data.Contexts
 
          public DbSet<User> Users { get; set; }
 
+         
          public DataContext()
          {
          }
+         
+//         public DataContext(DbContextOptions<DataContext> options)
+//             :base(options)
+//         {
+//         }
 
          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-             => optionsBuilder.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=postgres");
+             => optionsBuilder.UseNpgsql("Host=localhost;Database=tourbase;Username=Wombat;Password=123");
 
          protected override void OnModelCreating(ModelBuilder modelBuilder)
          {
+             modelBuilder.Entity<User>().HasKey(k => k.Id);
+             modelBuilder.Entity<Tour>().HasKey(k => k.Id);
+             modelBuilder.Entity<Hotel>().HasKey(k => k.Id);
+             
+             
              modelBuilder.Entity<User>().HasData(
                  new User[]
                  {
@@ -47,6 +58,8 @@ namespace ToursSoft.Data.Contexts
                      new Hotel(Guid.NewGuid(), "SPA RESORT 5 STARS EXCELLENT SHOWER FULL TIME WHORES MOTEL", "Moscow, za garajami street", 7987987),
                      new Hotel(Guid.NewGuid(), "Medium comfort hotel, with full time maniac. Free kittens", "Dominican Republic", 786876), 
                  });
+
+             base.OnModelCreating(modelBuilder);
          }
      }
  }
