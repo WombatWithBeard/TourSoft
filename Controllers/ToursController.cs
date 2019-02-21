@@ -12,6 +12,11 @@ namespace ToursSoft.Controllers
     public class ToursController : Controller
     {
         private DataContext _context;
+        
+        public ToursController(DataContext context)
+        {
+            _context = context;
+        }       
 
         [HttpPost]
         public IActionResult Add([FromBody] List<Tour> tours)
@@ -28,6 +33,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
                 return BadRequest(e.ToString());
             }
             return Ok("Success added tour");

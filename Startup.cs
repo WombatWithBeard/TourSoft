@@ -22,11 +22,9 @@ namespace ToursSoft
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
-//            services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>().BuildServiceProvider();  
-//            (options => 
-//                options.UseNpgsql("Host=localhost;Database=postgres1;Username=postgres;Password=postgres")));
-            
+            var con = "Host=localhost;Database=tours;Username=postgres;Password=postgres";
+            services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>(options => { options.UseNpgsql(con);});
+
             services.AddMvc();
             
             services.AddSwaggerGen(x => { x.SwaggerDoc("v1", new Info {Title = "Tours API", Version = "v1"}); });

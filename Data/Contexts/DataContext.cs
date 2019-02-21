@@ -16,19 +16,23 @@ namespace ToursSoft.Data.Contexts
 
          public DbSet<User> Users { get; set; }
 
+         public DataContext(DbContextOptions<DataContext> options):base(options)
+         {
+         }
+         
          public DataContext()
          {
          }
 
          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-             => optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;");//Password=123");
+             => optionsBuilder.UseNpgsql(@"host=localhost;database=tours;username=postgres;password=postgres");
 
          protected override void OnModelCreating(ModelBuilder modelBuilder)
          {
              base.Database.EnsureDeleted();
              base.Database.EnsureCreated();
              
-             modelBuilder.Entity<User>().HasKey(k => new { k.Id, k.Name, k.Company, k.PhoneNumber, k.IsAdmin });
+//             modelBuilder.Entity<User>().HasKey(k => new { k.Id, k.Name, k.Company, k.PhoneNumber, k.IsAdmin });
 //             modelBuilder.Entity<Tour>().HasKey(k => k.Id);
 //             modelBuilder.Entity<Hotel>().HasKey(k => k.Id);
              
