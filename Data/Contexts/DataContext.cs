@@ -27,13 +27,16 @@ namespace ToursSoft.Data.Contexts
 //         }
 
          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-             => optionsBuilder.UseNpgsql("Host=localhost;Database=tourbase;Username=Wombat;Password=123");
+             => optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;");//Password=123");
 
          protected override void OnModelCreating(ModelBuilder modelBuilder)
          {
-             modelBuilder.Entity<User>().HasKey(k => k.Id);
-             modelBuilder.Entity<Tour>().HasKey(k => k.Id);
-             modelBuilder.Entity<Hotel>().HasKey(k => k.Id);
+             base.Database.EnsureDeleted();
+             base.Database.EnsureCreated();
+             
+             modelBuilder.Entity<User>().HasKey(k => new { k.Id, k.Name, k.Company, k.PhoneNumber, k.IsAdmin });
+//             modelBuilder.Entity<Tour>().HasKey(k => k.Id);
+//             modelBuilder.Entity<Hotel>().HasKey(k => k.Id);
              
              
              modelBuilder.Entity<User>().HasData(
@@ -59,6 +62,7 @@ namespace ToursSoft.Data.Contexts
                      new Hotel(Guid.NewGuid(), "Medium comfort hotel, with full time maniac. Free kittens", "Dominican Republic", 786876), 
                  });
 
+             base.SaveChanges();
              base.OnModelCreating(modelBuilder);
          }
      }

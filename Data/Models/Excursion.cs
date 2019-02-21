@@ -8,6 +8,7 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
+    [Table("Excursion")]
     public class Excursion: Model
     {
         public Excursion(Guid id, DateTime dateTime, Dictionary<Guid, Person> managersGroup, bool status, Guid tourId) 

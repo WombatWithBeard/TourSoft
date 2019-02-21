@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models
 {
+    [Table("Person")]
     public class Person: Model
     {
         public Person(Guid id, int adultCount, int childrenCount, int babyCount, double prepayment, double leftToPay, 
-            bool photosesion, string comment, Guid hotelGuid, List<string> hotelRoom, 
+            bool photosession, string comment, Guid hotelGuid, List<string> hotelRoom, 
             DateTime pickUpTime, Guid managerId) : base(id)
         {
             AdultCount = adultCount;
@@ -14,7 +16,7 @@ namespace ToursSoft.Data.Models
             BabyCount = babyCount;
             Prepayment = prepayment;
             LeftToPay = leftToPay;
-            Photosesion = photosesion;
+            Photosession = photosession;
             Comment = comment;
             HotelGuid = hotelGuid;
             HotelRoom = hotelRoom;
@@ -51,7 +53,7 @@ namespace ToursSoft.Data.Models
         /// <summary>
         /// Info about photosession: 0 -refused , 1 - agreed
         /// </summary>
-        public bool Photosesion { get; set; }
+        public bool Photosession { get; set; }
 
         /// <summary>
         /// Some info about these persons

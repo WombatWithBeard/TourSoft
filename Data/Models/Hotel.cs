@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models
 {
+    [Table("Hotel")]
     public class Hotel: Model
     {
         public Hotel(Guid id, string name, string address, int phoneNumber) : base(id)

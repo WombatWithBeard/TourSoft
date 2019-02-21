@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity.UI.Pages.Account.Manage.Internal;
 using ToursSoft.Data.Interface;
 using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
+    [Table("User")]
     public class User: Model
     {
         public User(Guid id, string name, string company, int phoneNumber, bool isAdmin) : base(id)

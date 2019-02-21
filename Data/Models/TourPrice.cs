@@ -5,6 +5,7 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
+    [Table("TourPrice")]
     public class TourPrice: Model
     {
         public TourPrice(Guid id, Guid tourId, Guid managerId, double price) : base(id)
