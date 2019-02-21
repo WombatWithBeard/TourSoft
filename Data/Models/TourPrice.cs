@@ -15,6 +15,10 @@ namespace ToursSoft.Data.Models
             Price = price;
         }
 
+        public TourPrice()
+        {
+        }
+
         /// <summary>
         /// Link on the tour
         /// </summary>

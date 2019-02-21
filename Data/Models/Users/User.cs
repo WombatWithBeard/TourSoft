@@ -19,6 +19,10 @@ namespace ToursSoft.Data.Models
             IsAdmin = isAdmin;
         }
 
+        public User()
+        {
+        }
+
         /// <summary>
         /// Name of the User
         /// </summary>

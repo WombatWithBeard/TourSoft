@@ -14,6 +14,10 @@ namespace ToursSoft.Data.Models
             Description = description;
         }
 
+        public Tour()
+        {
+        }
+
         /// <summary>
         /// Info about name of the tour
         /// </summary>

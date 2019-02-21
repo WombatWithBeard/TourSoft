@@ -20,6 +20,10 @@ namespace ToursSoft.Data.Models
             TourId = tourId;
         }
 
+        public Excursion()
+        {
+        }
+
         public DateTime DateTime { get; set; }
         
         /// <summary>

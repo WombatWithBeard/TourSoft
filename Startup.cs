@@ -23,12 +23,12 @@ namespace ToursSoft
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>().BuildServiceProvider();  
+//            services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>().BuildServiceProvider();  
 //            (options => 
 //                options.UseNpgsql("Host=localhost;Database=postgres1;Username=postgres;Password=postgres")));
             
             services.AddMvc();
-
+            
             services.AddSwaggerGen(x => { x.SwaggerDoc("v1", new Info {Title = "Tours API", Version = "v1"}); });
         }
 
@@ -43,8 +43,9 @@ namespace ToursSoft
             //TO DO: swagger dont work
             app.UseSwagger();
             app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Tour API v1"); });
-            app.UseMvc();          
-            app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
+            
+            app.UseMvc();        
+//            app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
 
         }
     }

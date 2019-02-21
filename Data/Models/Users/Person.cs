@@ -23,6 +23,10 @@ namespace ToursSoft.Data.Models
             PickUpTime = pickUpTime;
             ManagerId = managerId;
         }
+
+        public Person()
+        {
+        }
         //TO DO:
         
         /// <summary>

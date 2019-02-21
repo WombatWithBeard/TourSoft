@@ -71,14 +71,14 @@ namespace ToursSoft.Controllers
         /// <param name="o"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] object o)
+        public IActionResult Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] List<Person> persons)
         {
             try
             {
-                var data = o.ToString();
-                var personsInfo = JsonConvert.DeserializeObject<Person>(data);
-
-                _context.Excursions.Where(x => x.Id == guidExcursion).FirstOrDefault().ManagersGroup.Add(guidUser, personsInfo);
+                foreach (var person in persons)
+                {
+                    _context.Excursions.Where(x => x.Id == guidExcursion).FirstOrDefault().ManagersGroup.Add(guidUser, person);  
+                }
                 _context.SaveChanges();
             }
             catch (Exception e)

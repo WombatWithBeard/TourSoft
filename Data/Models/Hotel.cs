@@ -14,6 +14,10 @@ namespace ToursSoft.Data.Models
             PhoneNumber = phoneNumber;
         }
 
+        public Hotel()
+        {
+        }
+
         /// <summary>
         /// Info about name of the hotel
         /// </summary>

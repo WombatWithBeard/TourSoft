@@ -16,15 +16,9 @@ namespace ToursSoft.Data.Contexts
 
          public DbSet<User> Users { get; set; }
 
-         
          public DataContext()
          {
          }
-         
-//         public DataContext(DbContextOptions<DataContext> options)
-//             :base(options)
-//         {
-//         }
 
          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
              => optionsBuilder.UseNpgsql(@"host=localhost;database=postgres;user id=postgres;");//Password=123");

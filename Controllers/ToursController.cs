@@ -14,12 +14,10 @@ namespace ToursSoft.Controllers
         private DataContext _context;
 
         [HttpPost]
-        public IActionResult Add([FromBody] object o)
+        public IActionResult Add([FromBody] List<Tour> tours)
         {
             try
             {
-                var data = o.ToString();
-                var tours = JsonConvert.DeserializeObject<List<Tour>>(data);
                 using (_context = new DataContext())
                 {
                     foreach (var tour in tours)
