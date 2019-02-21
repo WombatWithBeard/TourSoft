@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
-using ToursSoft.Data.Models.Contexts;
 
 namespace ToursSoft.Controllers
 {

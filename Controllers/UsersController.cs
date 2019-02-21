@@ -9,31 +9,28 @@ using ToursSoft.Data.Models;
 namespace ToursSoft.Controllers
 {
     [Route("api/[controller]")]
-    public class ToursController : Controller
+    public class UsersController
     {
         private DataContext _context;
 
-        [HttpPost]
-        public IActionResult Add([FromBody] object o)
-        {
-            try
-            {
-                var data = o.ToString();
-                var tours = JsonConvert.DeserializeObject<List<Tour>>(data);
-                using (_context = new DataContext())
-                {
-                    foreach (var tour in tours)
-                    {
-                        _context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-            return Ok("Success added tour");
-        }
+//        [HttpPost]
+//        public IActionResult Add([FromBody] object o)
+//        {
+//            try
+//            {
+//                var data = o.ToString();
+//                var users = JsonConvert.DeserializeObject<List<User>>(data);
+//                using (_context = new DataContext())
+//                {
+// 
+//                }
+//            }
+//            catch (Exception e)
+//            {
+//                return BadRequest(e.ToString());
+//            }
+//            return Ok("Success added tour");
+//        }
 
         [HttpGet]
         public IActionResult Get()

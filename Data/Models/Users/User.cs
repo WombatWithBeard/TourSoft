@@ -7,9 +7,9 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
-    public class User: Model, IExcursionViewing, IExcursionRegistration
+    public class User: Model
     {
-        protected User(Guid id, string name, string company, int phoneNumber, bool isAdmin) : base(id)
+        public User(Guid id, string name, string company, int phoneNumber, bool isAdmin) : base(id)
         {
             Name = name;
             Company = company;
@@ -39,21 +39,5 @@ namespace ToursSoft.Data.Models
         /// </summary>
         [Required]
         public bool IsAdmin { get; set; }
-
-        /// <summary>
-        /// Просмотр экскурсий
-        /// </summary>
-        public Dictionary<DateTime, Excursion> ExcursionViewing()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Регистрация на экскурсию
-        /// </summary>
-        public void ExcursionRegistration(Person person, Guid ExcursionId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
-using ToursSoft.Data.Models.Contexts;
 
 namespace ToursSoft.Controllers
 {
