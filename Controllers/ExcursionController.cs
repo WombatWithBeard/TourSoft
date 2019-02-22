@@ -28,17 +28,18 @@ namespace ToursSoft.Controllers
                     var user = _context.Users.FirstOrDefault(x=>x.Id.Equals(guidUser));
                     if (user.IsAdmin)
                     {
-                        var result = JsonConvert.SerializeObject(_context.Excursions.Where( a => a.Status)
-                            .Select( x => new
-                            {
-                                x.DateTime,
-                                x.Id,
-                                x.Tour.Name,
-                                x.Tour.Description,
-                                x.Tour.Capacity,
-                                x.ManagersGroup,
-                            }));
-                        return new ObjectResult(result);  
+//                        var result = JsonConvert.SerializeObject(_context.Excursions.Where( a => a.Status)
+//                            .Select( x => new
+//                            {
+//                                x.DateTime,
+//                                x.Id,
+//                                x.Tour.Name,
+//                                x.Tour.Description,
+//                                x.Tour.Capacity,
+//                                x.ManagersGroup,
+//                            }));
+//                        return new ObjectResult(result);
+                        return Ok();
                     }
                     else
                     {
@@ -75,10 +76,10 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                foreach (var person in persons)
-                {
-                    _context.Excursions.Where(x => x.Id == guidExcursion).FirstOrDefault().ManagersGroup.Add(guidUser, person);  
-                }
+//                foreach (var person in persons)
+//                {
+//                    _context.Excursions.Where(x => x.Id == guidExcursion).FirstOrDefault().ManagersGroup.Add(guidUser, person);  
+//                }
                 _context.SaveChanges();
             }
             catch (Exception e)

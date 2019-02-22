@@ -15,7 +15,7 @@ namespace ToursSoft.Data.Models
             : base(id)
         {
             DateTime = dateTime;
-            ManagersGroup = managersGroup;
+//            ManagersGroup = managersGroup;
             Status = status;
             TourId = tourId;
         }
@@ -26,10 +26,12 @@ namespace ToursSoft.Data.Models
 
         public DateTime DateTime { get; set; }
         
+        
+        //TO DO: Lol
         /// <summary>
         /// Group of people, which managers add in this excursion
         /// </summary>
-        public Dictionary<Guid, Person> ManagersGroup { get; set; }
+//        public Dictionary<Guid, Person> ManagersGroup { get; set; }
         
         /// <summary>
         /// Status of this excursion: 0 - not active, 1 - is active

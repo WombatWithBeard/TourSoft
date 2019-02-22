@@ -28,6 +28,7 @@ namespace ToursSoft.Controllers
                     foreach (var tour in tours)
                     {
                         _context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
+                        _context.SaveChanges();
                     }
                 }
             }

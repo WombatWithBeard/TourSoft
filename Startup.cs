@@ -18,14 +18,21 @@ namespace ToursSoft
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        
+        public IConfiguration Configuration { get; }
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var con = "Host=localhost;Database=tours;Username=postgres;Password=postgres";
+            var con = "Host=localhost;Port=5432Database=tours;Username=postgres;Password=postgres";
             services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>(options => { options.UseNpgsql(con);});
 
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
             services.AddSwaggerGen(x => { x.SwaggerDoc("v1", new Info {Title = "Tours API", Version = "v1"}); });
         }
