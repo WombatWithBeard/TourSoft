@@ -52,7 +52,6 @@ namespace ToursSoft.Controllers
                 foreach (var user in users)
                 {
                     _context.Users.Add(user);
-                    //_context.Users.Add(new User(Guid.NewGuid(), user.Name, user.Company, user.PhoneNumber, user.IsAdmin));
                 }
                 await  _context.SaveChangesAsync();
             }
@@ -74,6 +73,7 @@ namespace ToursSoft.Controllers
                     x.Company,
                     x.PhoneNumber,
                     x.Id,
+                    x.Password,
                 })
             );
             return new ObjectResult(result);

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -22,15 +24,15 @@ namespace ToursSoft.Controllers
         }
 
         [HttpPost("Login")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login([FromBody]LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == model.Password);
+                var pass = Convert.ToBase64String(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(model.Password)));
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == pass);
                 if (user != null)
                 {
-                    await Authenticate(model.Login); // аутентификация
+                    await Authenticate(model.Login);
  
                     //return RedirectToAction("Index", "Home");
                 }
@@ -40,46 +42,26 @@ namespace ToursSoft.Controllers
             return Ok();
         }
         
-        [HttpPost("Register")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([FromBody]LoginModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
-                if (user == null)
-                {
-                    // добавляем пользователя в бд
-                    _context.Users.Add(new User { Login = model.Login, Password = model.Password, IsAdmin = true, Name = "testLogin"});
-                    await _context.SaveChangesAsync();
- 
-                    await Authenticate(model.Login); // аутентификация
- 
-                    //return RedirectToAction("Index", "Home");
-                }
-                else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-            }
-            return Ok();
-        }
-        
         private async Task Authenticate(string userName)
         {
-            // создаем один claim
+            // create claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
             };
-            // создаем объект ClaimsIdentity
+            
+            // create object ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
+            
+            // setup authenticated cookies
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
         
-//        public async Task<IActionResult> Logout()
-//        {
-//            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-//            return RedirectToAction("Login", "Account");
-//        }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok();
+            //return RedirectToAction("Login", "Account");
+        }
     }
 }
