@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,12 @@ namespace ToursSoft
                 { options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));});
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                });
             
             services.AddSwaggerGen(x => { x.SwaggerDoc("v1", new Info {Title = "Tours API", Version = "v1"}); });
         }
@@ -45,6 +52,8 @@ namespace ToursSoft
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
             
             //TO DO: swagger dont work
             app.UseSwagger();

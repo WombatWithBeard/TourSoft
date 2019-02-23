@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ToursSoft.Data.Models;
 
 namespace ToursSoft.Data.Models
 {
@@ -33,9 +32,9 @@ namespace ToursSoft.Data.Models
         /// </summary>
         /// 
         [Required]
-        [ForeignKey("Manager")]
+        [ForeignKey("User")]
         public Guid ManagerId { get; set; }
-        public virtual User Manager { get; set; }
+        public virtual User User { get; set; }
 
         /// <summary>
         /// Info about price of the manager on the tour

@@ -11,11 +11,14 @@ namespace ToursSoft.Data.Models
     [Table("User")]
     public class User: Model
     {
-        public User(Guid id, string name, string company, int phoneNumber, bool isAdmin) : base(id)
+        public User(Guid id, string name, string company, int phoneNumber, string login, string password, bool isAdmin) 
+            : base(id)
         {
             Name = name;
             Company = company;
             PhoneNumber = phoneNumber;
+            Login = login;
+            Password = password;
             IsAdmin = isAdmin;
         }
 
@@ -39,6 +42,18 @@ namespace ToursSoft.Data.Models
         /// User phone
         /// </summary>
         public int PhoneNumber { get; set; }
+
+        /// <summary>
+        /// User login
+        /// </summary>
+        [Required]
+        public string Login { get; set; }
+
+        /// <summary>
+        /// User password
+        /// </summary>
+        [Required]
+        public string Password { get; set; }
         
         /// <summary>
         /// attribute: 0 - manager, 1 - admin

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
@@ -9,6 +11,7 @@ using ToursSoft.Data.Models;
 namespace ToursSoft.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ExcursionController : Controller
     {
         private DataContext _context;
@@ -72,7 +75,7 @@ namespace ToursSoft.Controllers
         /// <param name="o"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] List<Person> persons)
+        public async Task<IActionResult> Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] List<Person> persons)
         {
             try
             {
@@ -80,7 +83,7 @@ namespace ToursSoft.Controllers
 //                {
 //                    _context.Excursions.Where(x => x.Id == guidExcursion).FirstOrDefault().ManagersGroup.Add(guidUser, person);  
 //                }
-                _context.SaveChanges();
+                await  _context.SaveChangesAsync();
             }
             catch (Exception e)
             {

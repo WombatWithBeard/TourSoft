@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
@@ -9,6 +11,7 @@ using ToursSoft.Data.Models;
 namespace ToursSoft.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class HotelController : Controller
     {
         private readonly DataContext _context;
@@ -19,7 +22,7 @@ namespace ToursSoft.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update([FromBody] List<Hotel> hotels)
+        public async Task<IActionResult> Update([FromBody] List<Hotel> hotels)
         {
             try
             {
@@ -27,7 +30,7 @@ namespace ToursSoft.Controllers
                 {
                     _context.Hotels.Update(hotel);
                 }
-                _context.SaveChanges();
+                await  _context.SaveChangesAsync();
 
             }
             catch (Exception e)
@@ -39,7 +42,7 @@ namespace ToursSoft.Controllers
         }
         
         [HttpPost("add")]
-        public IActionResult Add([FromBody] List<Hotel> hotels)
+        public async Task<IActionResult> Add([FromBody] List<Hotel> hotels)
         {
             try
             {
@@ -47,8 +50,7 @@ namespace ToursSoft.Controllers
                 {
                     _context.Hotels.Add(new Hotel(Guid.NewGuid(), hotel.Name, hotel.Address, hotel.PhoneNumber));
                 }
-
-                _context.SaveChanges();
+                await  _context.SaveChangesAsync();
             }
             catch (Exception e)
             {

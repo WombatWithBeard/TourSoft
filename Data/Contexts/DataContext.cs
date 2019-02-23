@@ -17,6 +17,8 @@ namespace ToursSoft.Data.Contexts
          public DbSet<TourPrice> TourPrices { get; set; }
 
          public DbSet<User> Users { get; set; }
+         
+         //public DbSet<LoginModel> LoginModels { get; set; }
 
          public DataContext(DbContextOptions<DataContext> options):base(options)
          {

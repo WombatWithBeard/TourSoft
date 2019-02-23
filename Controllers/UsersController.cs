@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Tree;
@@ -13,6 +14,7 @@ using ToursSoft.Data.Models;
 namespace ToursSoft.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController: Controller
     {
         private readonly DataContext _context;
@@ -23,7 +25,7 @@ namespace ToursSoft.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update([FromBody] List<User> users)
+        public async Task<IActionResult> Update([FromBody] List<User> users)
         {
             try
             {
@@ -31,7 +33,7 @@ namespace ToursSoft.Controllers
                 {
                     _context.Users.Update(user);
                 }
-                _context.SaveChanges();
+                await  _context.SaveChangesAsync();
 
             }
             catch (Exception e)
@@ -43,15 +45,16 @@ namespace ToursSoft.Controllers
         }
         
         [HttpPost("add")]
-        public IActionResult Add([FromBody] List<User> users)
+        public async Task<IActionResult> Add([FromBody] List<User> users)
         {
             try
             {
                 foreach (var user in users)
                 {
-                     _context.Users.Add(new User(Guid.NewGuid(), user.Name, user.Company, user.PhoneNumber, user.IsAdmin));
+                    _context.Users.Add(user);
+                    //_context.Users.Add(new User(Guid.NewGuid(), user.Name, user.Company, user.PhoneNumber, user.IsAdmin));
                 }
-                _context.SaveChanges();
+                await  _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
