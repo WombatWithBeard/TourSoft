@@ -12,6 +12,8 @@ namespace ToursSoft.Data.Contexts
 
          public DbSet<Tour> Tours { get; set; }
 
+         public DbSet<ManagersGroup> ManagersGroups { get; set; }
+
          public DbSet<TourPrice> TourPrices { get; set; }
 
          public DbSet<User> Users { get; set; }
@@ -21,47 +23,21 @@ namespace ToursSoft.Data.Contexts
          }
          
          public DataContext()
-         {
+         { 
          }
 
-         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-             => optionsBuilder.UseNpgsql(@"host=localhost;port=5432;database=tours;username=postgres;password=postgres");
+         protected override void OnModelCreating(ModelBuilder modelBuilder)
+         {
+             modelBuilder.Entity<User>().ToTable("User");
+             modelBuilder.Entity<Tour>().ToTable("Tour");
+             modelBuilder.Entity<Hotel>().ToTable("Hotel");
+             modelBuilder.Entity<TourPrice>().ToTable("TourPrice");
+             modelBuilder.Entity<ManagersGroup>().ToTable("ManagersGroup");
+             modelBuilder.Entity<Excursion>().ToTable("Excursion");
+         }
 
-//         protected override void OnModelCreating(ModelBuilder modelBuilder)
-//         {
-//             base.Database.EnsureDeleted();
-//             base.Database.EnsureCreated();
-//             
-////             modelBuilder.Entity<User>().HasKey(k => new { k.Id, k.Name, k.Company, k.PhoneNumber, k.IsAdmin });
-////             modelBuilder.Entity<Tour>().HasKey(k => k.Id);
-////             modelBuilder.Entity<Hotel>().HasKey(k => k.Id);
-//             
-//             
-//             modelBuilder.Entity<User>().HasData(
-//                 new User[]
-//                 {
-//                     new User(Guid.NewGuid(), "Valeriy", "TourValeriy", 123456789, false), 
-//                     new User(Guid.NewGuid(), "Sergey", "SergeyInc", 0987665431, false), 
-//                     new User(Guid.NewGuid(), "Pavel", "PavelExcursions", 565656565, true), 
-//                 });
-//
-//             modelBuilder.Entity<Tour>().HasData(
-//                 new Tour[]
-//                 {
-//                     new Tour(Guid.NewGuid(), "Big cats", 60, "Tour where our cats eat you, scumbag"),
-//                     new Tour(Guid.NewGuid(), "Whales", 120, "You could feed to a whale your child for free"),
-//                     new Tour(Guid.NewGuid(), "Wombats", 1, "Wombats will do a cubic shit"), 
-//                 });
-//
-//             modelBuilder.Entity<Hotel>().HasData(
-//                 new Hotel[]
-//                 {
-//                     new Hotel(Guid.NewGuid(), "SPA RESORT 5 STARS EXCELLENT SHOWER FULL TIME WHORES MOTEL", "Moscow, za garajami street", 7987987),
-//                     new Hotel(Guid.NewGuid(), "Medium comfort hotel, with full time maniac. Free kittens", "Dominican Republic", 786876), 
-//                 });
-//
-//             base.SaveChanges();
-//             base.OnModelCreating(modelBuilder);
-//         }
+//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//             => optionsBuilder.UseNpgsql(@"host=localhost;port=5432;database=tours;username=postgres;password=postgres");
+
      }
  }

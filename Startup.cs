@@ -29,8 +29,9 @@ namespace ToursSoft
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var con = "Host=localhost;Port=5432Database=tours;Username=postgres;Password=postgres";
-            services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>(options => { options.UseNpgsql(con);});
+            //var con = "Host=localhost;Port=5432;Database=tours;Username=postgres;Password=postgres";
+            services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>(options => 
+                { options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));});
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             

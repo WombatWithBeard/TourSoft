@@ -11,7 +11,7 @@ namespace ToursSoft.Controllers
     [Route("api/[controller]")]
     public class ToursController : Controller
     {
-        private DataContext _context;
+        private readonly DataContext _context;
         
         public ToursController(DataContext context)
         {
@@ -23,39 +23,32 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                using (_context = new DataContext())
+                foreach (var tour in tours)
                 {
-                    foreach (var tour in tours)
-                    {
-                        _context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
-                        _context.SaveChanges();
-                    }
+                    _context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
+                    _context.SaveChanges();
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
                 return BadRequest(e.ToString());
             }
-            return Ok("Success added tour");
+            return Ok("New tour was added successfully");
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            using (_context = new DataContext())
-            {
-                var result = JsonConvert.SerializeObject(_context.Tours
-                    .Select(x => new
-                    {
-                        x.Name,
-                        x.Capacity,
-                        x.Description,
-                        x.Id,
-                    })
-                );
-                return new ObjectResult(result);
-            }
+            var result = JsonConvert.SerializeObject(_context.Tours
+                .Select(x => new
+                {
+                    x.Name,
+                    x.Capacity,
+                    x.Description,
+                    x.Id,
+                })
+            );
+            return new ObjectResult(result);
         }
     }
 }
