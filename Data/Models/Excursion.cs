@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Routing.Tree;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ToursSoft.Data.Models;
@@ -48,5 +49,11 @@ namespace ToursSoft.Data.Models
         [ForeignKey("Tour")]
         public Guid TourId { get; set; }
         public virtual Tour Tour { get; set; }
+
+        //TO DO: do it
+        public bool GetCapacity(Person persons)
+        {
+            return true;
+        }
     }
 }

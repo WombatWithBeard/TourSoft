@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Swagger;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
 
@@ -75,14 +77,14 @@ namespace ToursSoft.Controllers
         /// <param name="o"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] List<Person> persons)
+        public async Task<IActionResult> Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] Person persons)
         {
             try
             {
-//                foreach (var person in persons)
-//                {
-//                    _context.Excursions.Where(x => x.Id == guidExcursion).FirstOrDefault().ManagersGroup.Add(guidUser, person);  
-//                }
+                if (_context.Excursions.Where(x => x.Id == guidExcursion && x.GetCapacity(persons)).Select(x => true).FirstOrDefault(x => x))
+                {
+                    
+                }
                 await  _context.SaveChangesAsync();
             }
             catch (Exception e)
