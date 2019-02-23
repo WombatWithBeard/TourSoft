@@ -18,7 +18,27 @@ namespace ToursSoft.Controllers
             _context = context;
         }       
 
-        [HttpPost]
+        [HttpPost("update")]
+        public IActionResult Update([FromBody] List<Tour> tours)
+        {
+            try
+            {
+                foreach (var tour in tours)
+                {
+                    _context.Tours.Update(tour);
+                }
+                _context.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+
+            return Ok("Info was updated successfully");
+        }
+        
+        [HttpPost("add")]
         public IActionResult Add([FromBody] List<Tour> tours)
         {
             try
@@ -26,8 +46,8 @@ namespace ToursSoft.Controllers
                 foreach (var tour in tours)
                 {
                     _context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
-                    _context.SaveChanges();
                 }
+                _context.SaveChanges();
             }
             catch (Exception e)
             {

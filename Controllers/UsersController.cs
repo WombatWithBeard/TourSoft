@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Tree;
 using Newtonsoft.Json;
@@ -21,12 +22,17 @@ namespace ToursSoft.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        public IActionResult Update([FromBody] Guid userid, User user)
+        [HttpPost("update")]
+        public IActionResult Update([FromBody] List<User> users)
         {
             try
             {
-                _context.Users.Where(x => x.Id.Equals(userid));
+                foreach (var user in users)
+                {
+                    _context.Users.Update(user);
+                }
+                _context.SaveChanges();
+
             }
             catch (Exception e)
             {
@@ -36,16 +42,16 @@ namespace ToursSoft.Controllers
             return Ok("Info was updated successfully");
         }
         
-        [HttpPost]
+        [HttpPost("add")]
         public IActionResult Add([FromBody] List<User> users)
         {
             try
             {
                 foreach (var user in users)
                 {
-                    //TO DO: Test
-                     _context.Users.Add(user);
+                     _context.Users.Add(new User(Guid.NewGuid(), user.Name, user.Company, user.PhoneNumber, user.IsAdmin));
                 }
+                _context.SaveChanges();
             }
             catch (Exception e)
             {

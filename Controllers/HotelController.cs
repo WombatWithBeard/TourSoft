@@ -18,7 +18,27 @@ namespace ToursSoft.Controllers
             _context = context;
         }
 
-        [HttpPost]
+        [HttpPost("update")]
+        public IActionResult Update([FromBody] List<Hotel> hotels)
+        {
+            try
+            {
+                foreach (var hotel in hotels)
+                {
+                    _context.Hotels.Update(hotel);
+                }
+                _context.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+
+            return Ok("Info was updated successfully");
+        }
+        
+        [HttpPost("add")]
         public IActionResult Add([FromBody] List<Hotel> hotels)
         {
             try
@@ -27,6 +47,8 @@ namespace ToursSoft.Controllers
                 {
                     _context.Hotels.Add(new Hotel(Guid.NewGuid(), hotel.Name, hotel.Address, hotel.PhoneNumber));
                 }
+
+                _context.SaveChanges();
             }
             catch (Exception e)
             {
