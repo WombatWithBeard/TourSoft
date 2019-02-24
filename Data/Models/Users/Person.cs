@@ -8,8 +8,7 @@ namespace ToursSoft.Data.Models
     public class Person: Model
     {
         public Person(Guid id, int adultCount, int childrenCount, int babyCount, double prepayment, double leftToPay, 
-            bool photosession, string comment, Guid hotelId, List<string> hotelRoom, DateTime pickUpTime) 
-            : base(id)
+            bool photosession, string comment, Guid hotelId, List<string> hotelRoom, DateTime pickUpTime) : base(id)
         {
             AdultCount = adultCount;
             ChildrenCount = childrenCount;
@@ -26,7 +25,6 @@ namespace ToursSoft.Data.Models
         public Person()
         {
         }
-        //TO DO:
         
         /// <summary>
         /// Info about the number of adult persons

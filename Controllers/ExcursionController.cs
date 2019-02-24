@@ -18,7 +18,7 @@ namespace ToursSoft.Controllers
     public class ExcursionController : Controller
     {
         private DataContext _context;
-        
+
         public ExcursionController(DataContext context)
         {
             _context = context;
@@ -97,20 +97,16 @@ namespace ToursSoft.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] ExcursionAddRequest excursionAddRequest)
         {
+            //TO DO
             try
             {
-                if (_context.Excursions.Where(x => x.Id == excursionAddRequest.ExcursionId && x.GetCapacity(excursionAddRequest.Person) && x.Status)
+                if (_context.Excursions.Where(x => x.Id == excursionAddRequest.ExcursionId && x.Status)
                     .Select(x => true).FirstOrDefault(x => x))
                 {
-                    foreach (var contextExcursion in _context.Excursions.Where(x =>
-                        x.Id == excursionAddRequest.ExcursionId))
-                    {
-                        var personId = Guid.NewGuid();
-                        excursionAddRequest.Person.Id = personId;
-                        
-                        contextExcursion.ManagersGroup.Add(new ManagersGroup(Guid.NewGuid(), personId,
-                            excursionAddRequest.UserId));
-                    }
+                    var personId = Guid.NewGuid();
+                    excursionAddRequest.Person.Id = personId;
+                    var mg = new ManagersGroup(Guid.NewGuid(), personId, excursionAddRequest.UserId, excursionAddRequest.ExcursionId);
+                    _context.ManagersGroups.Add(mg);
 
                     await  _context.SaveChangesAsync();
                 }

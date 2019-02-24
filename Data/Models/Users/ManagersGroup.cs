@@ -7,14 +7,11 @@ namespace ToursSoft.Data.Models
     [Table("ManagersGroup")]
     public class ManagersGroup: Model
     {
-        public ManagersGroup(Guid id, Guid personId, Guid managerId) : base(id)
+        public ManagersGroup(Guid id, Guid personId, Guid userId, Guid excursionId) : base(id)
         {
             PersonId = personId;
-            ManagerId = managerId;
-        }
-
-        public ManagersGroup()
-        {
+            UserId = userId;
+            ExcursionId = excursionId;
         }
 
         /// <summary>
@@ -29,8 +26,13 @@ namespace ToursSoft.Data.Models
         /// Manager guid from user table
         /// </summary>
         [Required]
-        [ForeignKey("Manager")]
-        public Guid ManagerId { get; set; }
-        public virtual User Manager { get; set; }
+        [ForeignKey("User")]
+        public Guid UserId { get; set; }
+        public virtual User User { get; set; }
+        
+        [Required]
+        [ForeignKey("Excursion")]
+        public Guid ExcursionId { get; set; }
+        public virtual Excursion Excursion { get; set; }
     }
 }
