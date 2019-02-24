@@ -14,7 +14,7 @@ using ToursSoft.Data.Models;
 namespace ToursSoft.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class UsersController: Controller
     {
         private readonly DataContext _context;

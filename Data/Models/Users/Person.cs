@@ -8,8 +8,8 @@ namespace ToursSoft.Data.Models
     public class Person: Model
     {
         public Person(Guid id, int adultCount, int childrenCount, int babyCount, double prepayment, double leftToPay, 
-            bool photosession, string comment, Guid hotelid, List<string> hotelRoom, 
-            DateTime pickUpTime) : base(id)
+            bool photosession, string comment, Guid hotelId, List<string> hotelRoom, DateTime pickUpTime) 
+            : base(id)
         {
             AdultCount = adultCount;
             ChildrenCount = childrenCount;
@@ -18,7 +18,7 @@ namespace ToursSoft.Data.Models
             LeftToPay = leftToPay;
             Photosession = photosession;
             Comment = comment;
-            HotelId = hotelid;
+            HotelId = hotelId;
             HotelRoom = hotelRoom;
             PickUpTime = pickUpTime;
         }
@@ -66,9 +66,9 @@ namespace ToursSoft.Data.Models
         /// <summary>
         /// Info about hotel of these persons
         /// </summary>
-        public Guid? HotelId { get; set; }
-        [ForeignKey("HotelId")]
-        public Hotel Hotel { get; set; }
+        [ForeignKey("Hotel")]
+        public Guid HotelId { get; set; }
+        public virtual Hotel Hotel { get; set; }
 
         /// <summary>
         /// Room(s) of these persons

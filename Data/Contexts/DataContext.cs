@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ToursSoft.Data.Models;
 
@@ -8,6 +9,8 @@ namespace ToursSoft.Data.Contexts
      {
          public DbSet<Excursion> Excursions { get; set; }
 
+         public DbSet<Person> Persons { get; set; }
+         
          public DbSet<Hotel> Hotels { get; set; }
 
          public DbSet<Tour> Tours { get; set; }
@@ -17,8 +20,6 @@ namespace ToursSoft.Data.Contexts
          public DbSet<TourPrice> TourPrices { get; set; }
 
          public DbSet<User> Users { get; set; }
-         
-         //public DbSet<LoginModel> LoginModels { get; set; }
 
          public DataContext(DbContextOptions<DataContext> options):base(options)
          {
@@ -40,6 +41,5 @@ namespace ToursSoft.Data.Contexts
 
 //         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //             => optionsBuilder.UseNpgsql(@"host=localhost;port=5432;database=tours;username=postgres;password=postgres");
-
      }
  }

@@ -20,17 +20,17 @@ namespace ToursSoft.Data.Models
         /// <summary>
         /// Person guid from person table
         /// </summary>
-        public Guid? PersonId { get; set; }
         [Required]
-        [ForeignKey("PersonId")]
+        [ForeignKey("Person")]
+        public Guid PersonId { get; set; }
         public virtual Person Person { get; set; }
 
         /// <summary>
         /// Manager guid from user table
         /// </summary>
-        public Guid ManagerId { get; set; }
         [Required]
-        [ForeignKey("ManagerId")]
-        public virtual User User { get; set; }
+        [ForeignKey("Manager")]
+        public Guid ManagerId { get; set; }
+        public virtual User Manager { get; set; }
     }
 }

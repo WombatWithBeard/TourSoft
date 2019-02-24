@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
+using ToursSoft.Data.Models.Service;
 
 namespace ToursSoft.Controllers
 {
@@ -17,6 +18,11 @@ namespace ToursSoft.Controllers
     public class ExcursionController : Controller
     {
         private DataContext _context;
+        
+        public ExcursionController(DataContext context)
+        {
+            _context = context;
+        }
 
         /// <summary>
         /// Get data about active excursion. If user is admin, return more information
@@ -74,7 +80,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var excursion in excursions)
                 {
-                    await _context.Excursions.AddAsync(excursion); 
+                    await _context.Excursions.AddAsync(excursion);
                 }
                 await _context.SaveChangesAsync();
             }
@@ -86,28 +92,32 @@ namespace ToursSoft.Controllers
         }
         
         //TO DO: Check tour capacity
+
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="guidExcursion"></param>
-        /// <param name="guidUser"></param>
-        /// <param name="o"></param>
-        /// <returns></returns>
         [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] Person person)
+        public async Task<IActionResult> Add([FromBody] ExcursionAddRequest excursionAddRequest)
         {
             try
             {
-                if (_context.Excursions.Where(x => x.Id == guidExcursion && x.GetCapacity(person) && x.Status)
+                if (_context.Excursions.Where(x => x.Id == excursionAddRequest.ExcursionId && x.GetCapacity(excursionAddRequest.Person) && x.Status)
                     .Select(x => true).FirstOrDefault(x => x))
                 {
-                    foreach (var contextExcursion in _context.Excursions.Where(x => x.Id == guidExcursion))
+                    foreach (var contextExcursion in _context.Excursions.Where(x =>
+                        x.Id == excursionAddRequest.ExcursionId))
                     {
-                        contextExcursion.ManagersGroup.Add(new ManagersGroup {Person = person, ManagerId = guidUser});
-                    } 
+                        var personId = Guid.NewGuid();
+                        excursionAddRequest.Person.Id = personId;
+                        
+                        contextExcursion.ManagersGroup.Add(new ManagersGroup(Guid.NewGuid(), personId,
+                            excursionAddRequest.UserId));
+                    }
+
+                    await  _context.SaveChangesAsync();
                 }
-                await  _context.SaveChangesAsync();
+                else
+                {
+                    return BadRequest("Uncorrect excursionid");
+                }
             }
             catch (Exception e)
             {

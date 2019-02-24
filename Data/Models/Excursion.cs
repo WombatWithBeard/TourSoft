@@ -12,12 +12,12 @@ namespace ToursSoft.Data.Models
     [Table("Excursion")]
     public class Excursion: Model
     {
-        public Excursion(Guid id, DateTime dateTime, List<ManagersGroup> managersGroup, bool status, Tour tour) : base(id)
+        public Excursion(Guid id, DateTime dateTime, bool status, Guid tourId, Guid managersGroupId) : base(id)
         {
             DateTime = dateTime;
-            ManagersGroup = managersGroup;
             Status = status;
-            Tour = tour;
+            TourId = tourId;
+            ManagersGroupId = managersGroupId;
         }
 
         public Excursion()
@@ -26,13 +26,6 @@ namespace ToursSoft.Data.Models
 
         [Required]
         public DateTime DateTime { get; set; }
-        
-        /// <summary>
-        /// Group of people, which managers add in this excursion
-        /// </summary>
-        public Guid? ManagersGroupId { get; set; }
-        [ForeignKey("ManagersGroupId")]
-        public List<ManagersGroup> ManagersGroup { get; set; }
         
         /// <summary>
         /// Status of this excursion: 0 - not active, 1 - is active
@@ -44,10 +37,17 @@ namespace ToursSoft.Data.Models
         /// <summary>
         /// Tour link
         /// </summary>
-        public Guid? TourId { get; set; }
         [Required]
-        [ForeignKey("TourId")]
-        public Tour Tour { get; set; }
+        [ForeignKey("Tour")]
+        public Guid TourId { get; set; }
+        public virtual Tour Tour { get; set; }
+                
+        /// <summary>
+        /// Group of people, which managers add in this excursion
+        /// </summary>
+        [ForeignKey("ManagersGroup")]
+        public Guid ManagersGroupId { get; set; }
+        public virtual List<ManagersGroup> ManagersGroup { get; set; }
 
         //TO DO: do it
         public bool GetCapacity(Person persons)
