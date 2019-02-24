@@ -37,6 +37,7 @@ namespace ToursSoft.Controllers
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
+            //TO DO:
             //return View(model);
             return Ok();
         }

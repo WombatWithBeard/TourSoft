@@ -48,7 +48,8 @@ namespace ToursSoft.Controllers
             {
                 foreach (var tour in tours)
                 {
-                    _context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
+                    await _context.Tours.AddAsync(tour);
+                    //_context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
                 }
                 await  _context.SaveChangesAsync();
             }

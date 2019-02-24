@@ -51,7 +51,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var user in users)
                 {
-                    _context.Users.Add(user);
+                    await _context.Users.AddAsync(user);
                 }
                 await  _context.SaveChangesAsync();
             }

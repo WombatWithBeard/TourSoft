@@ -7,10 +7,10 @@ namespace ToursSoft.Data.Models
     [Table("TourPrice")]
     public class TourPrice: Model
     {
-        public TourPrice(Guid id, Guid tourId, Guid managerId, double price) : base(id)
+        public TourPrice(Guid id, Tour tour, User user, double price) : base(id)
         {
-            TourId = tourId;
-            ManagerId = managerId;
+            Tour = tour;
+            User = user;
             Price = price;
         }
 
@@ -22,19 +22,19 @@ namespace ToursSoft.Data.Models
         /// Link on the tour
         /// </summary>
         /// 
+        public Guid? TourId { get; set; }
         [Required]
-        [ForeignKey("Tour")]
-        public Guid TourId { get; set; }
+        [ForeignKey("TourId")]
         public virtual Tour Tour { get; set; }
 
         /// <summary>
         /// Link on the manager
         /// </summary>
         /// 
+        public Guid? ManagerId { get; set; }
         [Required]
-        [ForeignKey("User")]
-        public Guid ManagerId { get; set; }
-        public virtual User User { get; set; }
+        [ForeignKey("ManagerId")]
+        public User User { get; set; }
 
         /// <summary>
         /// Info about price of the manager on the tour

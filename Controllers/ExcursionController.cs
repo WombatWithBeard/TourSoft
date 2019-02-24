@@ -66,6 +66,24 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
         }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromBody] List<Excursion> excursions)
+        {
+            try
+            {
+                foreach (var excursion in excursions)
+                {
+                    await _context.Excursions.AddAsync(excursion); 
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+            return Ok("");
+        }
         
         //TO DO: Check tour capacity
         
@@ -76,14 +94,18 @@ namespace ToursSoft.Controllers
         /// <param name="guidUser"></param>
         /// <param name="o"></param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] Person persons)
+        [HttpPost("add")]
+        public async Task<IActionResult> Add([FromBody] Guid guidExcursion, [FromBody] Guid guidUser, [FromBody] Person person)
         {
             try
             {
-                if (_context.Excursions.Where(x => x.Id == guidExcursion && x.GetCapacity(persons)).Select(x => true).FirstOrDefault(x => x))
+                if (_context.Excursions.Where(x => x.Id == guidExcursion && x.GetCapacity(person) && x.Status)
+                    .Select(x => true).FirstOrDefault(x => x))
                 {
-                    
+                    foreach (var contextExcursion in _context.Excursions.Where(x => x.Id == guidExcursion))
+                    {
+                        contextExcursion.ManagersGroup.Add(new ManagersGroup {Person = person, ManagerId = guidUser});
+                    } 
                 }
                 await  _context.SaveChangesAsync();
             }
