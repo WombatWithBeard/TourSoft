@@ -39,6 +39,8 @@ namespace ToursSoft.Data.Contexts
             modelBuilder.Entity<ManagersGroup>().ToTable("ManagersGroup");
             modelBuilder.Entity<Excursion>().ToTable("Excursion");
             modelBuilder.Entity<Person>().ToTable("Person");
+
+            modelBuilder.Entity<Tour>();
         }
 
         //         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

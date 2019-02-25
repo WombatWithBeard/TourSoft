@@ -73,8 +73,8 @@ namespace ToursSoft.Controllers
             }
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] List<Excursion> excursions)
+        [HttpPost("add")]
+        public async Task<IActionResult> Add([FromBody] List<Excursion> excursions)
         {
             try
             {
@@ -88,14 +88,14 @@ namespace ToursSoft.Controllers
             {
                 return BadRequest(e.ToString());
             }
-            return Ok("");
+            return Ok("Excursion was added sucecssfully");
         }
         
         //TO DO: Check tour capacity
 
         
-        [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] ExcursionAddRequest excursionAddRequest)
+        [HttpPost("update")]
+        public async Task<IActionResult> Update([FromBody] ExcursionAddRequest excursionAddRequest)
         {
             //TO DO
             try
@@ -105,6 +105,8 @@ namespace ToursSoft.Controllers
                 {
                     var personId = Guid.NewGuid();
                     excursionAddRequest.Person.Id = personId;
+                    _context.Persons.Add(excursionAddRequest.Person);
+                    
                     var mg = new ManagersGroup(Guid.NewGuid(), personId, excursionAddRequest.UserId, excursionAddRequest.ExcursionId);
                     _context.ManagersGroups.Add(mg);
 
