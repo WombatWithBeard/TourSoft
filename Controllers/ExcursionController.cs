@@ -30,42 +30,21 @@ namespace ToursSoft.Controllers
         /// <param name="guidUser">Current user ID</param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get([FromBody] Guid guidUser)
+        public IActionResult Get()//([FromBody] Guid guidUser)
         {
             try
             {
-                using (_context = new DataContext())
-                {
-                    var user = _context.Users.FirstOrDefault(x=>x.Id.Equals(guidUser));
-                    if (user.IsAdmin)
+                var result = JsonConvert.SerializeObject(_context.Excursions.Where(a => a.Status)
+                    .Select(x => new
                     {
-//                        var result = JsonConvert.SerializeObject(_context.Excursions.Where( a => a.Status)
-//                            .Select( x => new
-//                            {
-//                                x.DateTime,
-//                                x.Id,
-//                                x.Tour.Name,
-//                                x.Tour.Description,
-//                                x.Tour.Capacity,
-//                                x.ManagersGroup,
-//                            }));
-//                        return new ObjectResult(result);
-                        return Ok();
-                    }
-                    else
-                    {
-                        var result = JsonConvert.SerializeObject(_context.Excursions.Where( a => a.Status)
-                            .Select( x => new
-                            {
-                                x.DateTime,
-                                x.Id,
-                                x.Tour.Name,
-                                x.Tour.Description,
-                                x.Tour.Capacity,
-                            }));
-                        return new ObjectResult(result);  
-                    }
-                }
+                        //TO DO: вытащить информацию по людям, через отдельную модель
+                        x.DateTime,
+                        x.Status,
+                        x.Tour.Name,
+                        x.Tour.Capacity,
+                        x.Id
+                    }));
+                return new ObjectResult(result);
             }
             catch (Exception e)
             {
@@ -114,14 +93,14 @@ namespace ToursSoft.Controllers
                 }
                 else
                 {
-                    return BadRequest("Uncorrect excursionid");
+                    return BadRequest("Uncorrect data");
                 }
             }
             catch (Exception e)
             {
                 return BadRequest(e.ToString());
             }
-            return Ok("Success added persons to excursion");
+            return Ok("Person was added to excursion successfully");
         }
     }
 }

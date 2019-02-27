@@ -21,15 +21,12 @@ namespace ToursSoft.Controllers
             _context = context;
         }
 
-        [HttpPost("update")]
-        public async Task<IActionResult> Update([FromBody] List<Hotel> hotels)
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromBody] Hotel hotel)
         {
             try
             {
-                foreach (var hotel in hotels)
-                {
-                    _context.Hotels.Update(hotel);
-                }
+                _context.Hotels.Update(hotel);
                 await  _context.SaveChangesAsync();
 
             }

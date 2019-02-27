@@ -39,7 +39,7 @@ namespace ToursSoft
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.LoginPath = new PathString("/Account/Login");
                 });
             
             services.AddSwaggerGen(x => { x.SwaggerDoc("v1", new Info {Title = "Tours API", Version = "v1"}); });
