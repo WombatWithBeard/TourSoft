@@ -46,7 +46,7 @@ namespace ToursSoft.Controllers
                 foreach (var hotel in hotels)
                 {
                     //TO DO:
-                    _context.Hotels.Add(new Hotel(Guid.NewGuid(), hotel.Name, hotel.Address, hotel.PhoneNumber));
+                    _context.Hotels.Add(hotel);
                 }
                 await  _context.SaveChangesAsync();
             }

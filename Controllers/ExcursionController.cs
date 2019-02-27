@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
-using ToursSoft.Data.Models.Service;
 
 namespace ToursSoft.Controllers
 {
@@ -17,7 +16,7 @@ namespace ToursSoft.Controllers
     [Authorize]
     public class ExcursionController : Controller
     {
-        private DataContext _context;
+        private readonly DataContext _context;
 
         public ExcursionController(DataContext context)
         {
@@ -67,40 +66,7 @@ namespace ToursSoft.Controllers
             {
                 return BadRequest(e.ToString());
             }
-            return Ok("Excursion was added sucecssfully");
-        }
-        
-        //TO DO: Check tour capacity
-
-        
-        [HttpPost("update")]
-        public async Task<IActionResult> Update([FromBody] ExcursionAddRequest excursionAddRequest)
-        {
-            //TO DO
-            try
-            {
-                if (_context.Excursions.Where(x => x.Id == excursionAddRequest.ExcursionId && x.Status)
-                    .Select(x => true).FirstOrDefault(x => x))
-                {
-                    var personId = Guid.NewGuid();
-                    excursionAddRequest.Person.Id = personId;
-                    _context.Persons.Add(excursionAddRequest.Person);
-                    
-                    var mg = new ManagersGroup(Guid.NewGuid(), personId, excursionAddRequest.UserId, excursionAddRequest.ExcursionId);
-                    _context.ManagersGroups.Add(mg);
-
-                    await  _context.SaveChangesAsync();
-                }
-                else
-                {
-                    return BadRequest("Uncorrect data");
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.ToString());
-            }
-            return Ok("Person was added to excursion successfully");
+            return Ok("Excursion was added successfully");
         }
     }
 }

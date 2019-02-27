@@ -14,7 +14,7 @@ namespace ToursSoft.Data.Contexts
 
         public DbSet<Tour> Tours { get; set; }
 
-        public DbSet<ManagersGroup> ManagersGroups { get; set; }
+        public DbSet<ExcursionGroup> ExcursionGroups { get; set; }
 
         public DbSet<TourPrice> TourPrices { get; set; }
 
@@ -36,7 +36,7 @@ namespace ToursSoft.Data.Contexts
             modelBuilder.Entity<Tour>().ToTable("Tour");
             modelBuilder.Entity<Hotel>().ToTable("Hotel");
             modelBuilder.Entity<TourPrice>().ToTable("TourPrice");
-            modelBuilder.Entity<ManagersGroup>().ToTable("ManagersGroup");
+            modelBuilder.Entity<ExcursionGroup>().ToTable("ManagersGroup");
             modelBuilder.Entity<Excursion>().ToTable("Excursion");
             modelBuilder.Entity<Person>().ToTable("Person");
 

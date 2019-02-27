@@ -12,11 +12,11 @@ namespace ToursSoft.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
-    public class ToursController : Controller
+    public class TourController : Controller
     {
         private readonly DataContext _context;
         
-        public ToursController(DataContext context)
+        public TourController(DataContext context)
         {
             _context = context;
         }       
@@ -49,7 +49,6 @@ namespace ToursSoft.Controllers
                 foreach (var tour in tours)
                 {
                     await _context.Tours.AddAsync(tour);
-                    //_context.Tours.Add(new Tour(Guid.NewGuid(), tour.Name, tour.Capacity, tour.Description));
                 }
                 await  _context.SaveChangesAsync();
             }

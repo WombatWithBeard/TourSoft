@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models
@@ -65,6 +66,7 @@ namespace ToursSoft.Data.Models
         /// Info about hotel of these persons
         /// </summary>
         [ForeignKey("Hotel")]
+        [Required]
         public Guid HotelId { get; set; }
         public virtual Hotel Hotel { get; set; }
 

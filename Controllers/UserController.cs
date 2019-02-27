@@ -15,11 +15,11 @@ namespace ToursSoft.Controllers
 {
     [Route("api/[controller]")]
     //[Authorize]
-    public class UsersController: Controller
+    public class UserController: Controller
     {
         private readonly DataContext _context;
 
-        public UsersController(DataContext context)
+        public UserController(DataContext context)
         {
             _context = context;
         }
