@@ -1,16 +1,9 @@
 using System;
-using System.Buffers.Text;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Identity.UI.Pages.Account.Manage.Internal;
-using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using ToursSoft.Data.Interface;
-using ToursSoft.Data.Models;
 
-namespace ToursSoft.Data.Models
+namespace ToursSoft.Data.Models.Users
 {
     [Table("User")]
     public class User: Model

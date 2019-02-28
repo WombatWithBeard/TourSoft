@@ -21,7 +21,7 @@ namespace ToursSoft.Controllers
             _context = context;
         }
 
-        [HttpPut("update")]
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody] Hotel hotel)
         {
             try
@@ -38,7 +38,7 @@ namespace ToursSoft.Controllers
             return Ok("Info was updated successfully");
         }
         
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Hotel> hotels)
         {
             try
@@ -69,6 +69,26 @@ namespace ToursSoft.Controllers
                 })
             );
             return new ObjectResult(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] Guid hotelId)
+        {
+            try
+            {
+                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
+                var hotel = _context.Hotels.FirstOrDefault(x => x.Id == hotelId);
+                if (hotel != null)
+                {
+                    _context.Hotels.Remove(hotel);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+            return Ok("User was deleted successfully");
         }
     }
 }

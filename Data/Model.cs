@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using ToursSoft.Data.Interface;
+using ToursSoft.Data.Models.Interface;
 
-namespace ToursSoft.Data.Models
+namespace ToursSoft.Data
 {
     
     //TO DO: Entity info https://www.lucidchart.com/documents/edit/883a5e11-34ba-43d2-a1bc-13a21e7f2119/0

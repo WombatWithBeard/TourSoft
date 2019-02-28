@@ -1,8 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
 
-namespace ToursSoft.Data.Models
+namespace ToursSoft.ViewModels
 {
     public class LoginModel
     {

@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ToursSoft.Data.Models
+namespace ToursSoft.Data.Models.Users
 {
-    [Table("ManagersGroup")]
+    [Table("ExcursionGroup")]
     public class ExcursionGroup: Model
     {
         public ExcursionGroup(Guid id, Guid personId, Guid userId, Guid excursionId) : base(id)

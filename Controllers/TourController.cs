@@ -21,7 +21,27 @@ namespace ToursSoft.Controllers
             _context = context;
         }       
 
-        [HttpPost("update")]
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] Guid tourId)
+        {
+            try
+            {
+                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
+                var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId);
+                if (tour != null)
+                {
+                    _context.Tours.Remove(tour);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+            return Ok("User was deleted successfully");
+        }
+        
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody] List<Tour> tours)
         {
             try
@@ -41,7 +61,7 @@ namespace ToursSoft.Controllers
             return Ok("Info was updated successfully");
         }
         
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Tour> tours)
         {
             try
@@ -73,5 +93,7 @@ namespace ToursSoft.Controllers
             );
             return new ObjectResult(result);
         }
+        
+        
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ToursSoft.Data.Models
+namespace ToursSoft.Data.Models.Users
 {
     [Table("Person")]
     public class Person: Model

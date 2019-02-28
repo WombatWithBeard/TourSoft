@@ -4,9 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Swagger;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
 
@@ -26,7 +24,6 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Get data about active excursion. If user is admin, return more information
         /// </summary>
-        /// <param name="guidUser">Current user ID</param>
         /// <returns></returns>
         [HttpGet]
         public IActionResult Get()//([FromBody] Guid guidUser)
@@ -51,7 +48,7 @@ namespace ToursSoft.Controllers
             }
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Excursion> excursions)
         {
             try

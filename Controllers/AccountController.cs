@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToursSoft.Data.Contexts;
-using ToursSoft.Data.Models;
+using ToursSoft.ViewModels;
 
 namespace ToursSoft.Controllers
 {
@@ -25,20 +25,27 @@ namespace ToursSoft.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody]LoginModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var pass = Convert.ToBase64String(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(model.Password)));
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == pass);
-                if (user != null)
+                if (ModelState.IsValid)
                 {
-                    await Authenticate(model.Login);
+                    var pass = Convert.ToBase64String(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(model.Password)));
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == pass);
+                    if (user != null)
+                    {
+                        await Authenticate(model.Login);
  
-                    //return RedirectToAction("Index", "Home");
+                        //return RedirectToAction("Index", "Home");
+                    }
+                    ModelState.AddModelError("", "Invalid login or password");
+                    //return View(model);
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Invalid login or password");
             }
             //TO DO:
-            //return View(model);
             return Ok();
         }
         

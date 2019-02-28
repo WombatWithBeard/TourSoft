@@ -1,7 +1,6 @@
-using System;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ToursSoft.Data.Models;
+using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Data.Contexts
  {
