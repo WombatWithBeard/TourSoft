@@ -22,6 +22,33 @@ namespace ToursSoft.Controllers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<IActionResult> ChangeStatus([FromBody] Guid guid)
+        {
+            try
+            {
+                var status = _context.Excursions.FirstOrDefault(x => x.Id == guid);
+                if (status.Status)
+                {
+                    status.Status = false;
+                }
+                else if (status.Status == false)
+                {
+                    status.Status = true;
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+            return Ok("Excursion status was changed");
+        }
+
+        /// <summary>
         /// Get data about active excursion. If user is admin, return more information
         /// </summary>
         /// <returns></returns>

@@ -52,7 +52,7 @@ namespace ToursSoft
             
             //TO DO: swagger dont work
             app.UseSwagger();
-            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Tour API v1"); });
+            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/v1/swagger.json", "Tour API v1"); });
             
             app.UseMvc();        
 //            app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
