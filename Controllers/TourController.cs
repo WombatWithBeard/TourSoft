@@ -21,6 +21,11 @@ namespace ToursSoft.Controllers
             _context = context;
         }       
 
+        /// <summary>
+        /// Delete tour by id
+        /// </summary>
+        /// <param name="tourId"></param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] Guid tourId)
         {
@@ -41,6 +46,11 @@ namespace ToursSoft.Controllers
             return Ok("User was deleted successfully");
         }
         
+        /// <summary>
+        /// Update info about tours
+        /// </summary>
+        /// <param name="tours"></param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] List<Tour> tours)
         {
@@ -61,6 +71,11 @@ namespace ToursSoft.Controllers
             return Ok("Info was updated successfully");
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tours"></param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Tour> tours)
         {

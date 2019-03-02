@@ -21,11 +21,17 @@ namespace ToursSoft.Controllers
                 
         //TO DO: Check tour capacity
         
+        /// <summary>
+        /// Add info about excursion group
+        /// </summary>
+        /// <param name="excursionGroup">ExcursionGroup</param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] ExcursionGroup excursionGroup)
         {
             try
             {
+                Console.WriteLine();
                 if (_context.Excursions.Where(x => x.Id == excursionGroup.ExcursionId && x.Status)
                     .Select(x => true).FirstOrDefault(x => x))
                 {
@@ -44,6 +50,11 @@ namespace ToursSoft.Controllers
             return Ok("Excursion group was added to excursion successfully");
         }
         
+        /// <summary>
+        /// Delete excursiongroup by id
+        /// </summary>
+        /// <param name="excrusionGroupId"></param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] Guid excrusionGroupId)
         {

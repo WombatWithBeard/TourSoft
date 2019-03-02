@@ -22,6 +22,11 @@ namespace ToursSoft.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Login user on server
+        /// </summary>
+        /// <param name="model">login model - userLogin\userPassword</param>
+        /// <returns>Returns default view, after success login</returns>
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody]LoginModel model)
         {
@@ -49,6 +54,11 @@ namespace ToursSoft.Controllers
             return Ok();
         }
         
+        /// <summary>
+        /// Authenticate method
+        /// </summary>
+        /// <param name="userName">userLogin</param>
+        /// <returns>Cookies</returns>
         private async Task Authenticate(string userName)
         {
             // create claim
@@ -64,6 +74,10 @@ namespace ToursSoft.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
         
+        /// <summary>
+        /// Logout user from server
+        /// </summary>
+        /// <returns>Redirect on Login view</returns>
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

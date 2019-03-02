@@ -21,6 +21,11 @@ namespace ToursSoft.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Update info about hotel
+        /// </summary>
+        /// <param name="hotel"></param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] Hotel hotel)
         {
@@ -38,6 +43,11 @@ namespace ToursSoft.Controllers
             return Ok("Info was updated successfully");
         }
         
+        /// <summary>
+        /// Add new hotels
+        /// </summary>
+        /// <param name="hotels"></param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Hotel> hotels)
         {
@@ -57,20 +67,36 @@ namespace ToursSoft.Controllers
             return Ok("New hotel was added successfully");
         }
         
+        /// <summary>
+        /// Get info about hotels
+        /// </summary>
+        /// <returns>Ok, or badrequest</returns>
         [HttpGet]
         public IActionResult Get()
         {
-            var result = JsonConvert.SerializeObject(_context.Hotels.Select(x => new
-                {
-                    x.Name,
-                    x.Address,
-                    x.PhoneNumber,
-                    x.Id,
-                })
-            );
-            return new ObjectResult(result);
+            try
+            {
+                var result = JsonConvert.SerializeObject(_context.Hotels.Select(x => new
+                    {
+                        x.Name,
+                        x.Address,
+                        x.PhoneNumber,
+                        x.Id,
+                    })
+                );
+                return new ObjectResult(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
         }
 
+        /// <summary>
+        /// Delete hotel by id
+        /// </summary>
+        /// <param name="hotelId"></param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] Guid hotelId)
         {

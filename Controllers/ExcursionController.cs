@@ -22,10 +22,10 @@ namespace ToursSoft.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Changing status of the excursion
         /// </summary>
-        /// <param name="guid"></param>
-        /// <returns></returns>
+        /// <param name="guid">Excursion ID</param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpPut]
         public async Task<IActionResult> ChangeStatus([FromBody] Guid guid)
         {
@@ -51,12 +51,13 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Get data about active excursion. If user is admin, return more information
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Ok, or badrequest</returns>
         [HttpGet]
         public IActionResult Get()//([FromBody] Guid guidUser)
         {
             try
             {
+                //TO DO: make Admin info
                 var result = JsonConvert.SerializeObject(_context.Excursions.Where(a => a.Status)
                     .Select(x => new
                     {
@@ -75,6 +76,11 @@ namespace ToursSoft.Controllers
             }
         }
 
+        /// <summary>
+        /// Creating new excursion
+        /// </summary>
+        /// <param name="excursions">excursion info</param>
+        /// <returns>Ok, or badrequest</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Excursion> excursions)
         {

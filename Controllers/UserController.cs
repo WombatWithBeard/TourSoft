@@ -82,8 +82,7 @@ namespace ToursSoft.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var result = JsonConvert.SerializeObject(_context.Users
-                .Select(x => new
+            var result = JsonConvert.SerializeObject(_context.Users.Select(x => new
                 {
                     x.Name,
                     x.Company,

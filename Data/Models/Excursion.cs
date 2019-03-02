@@ -35,15 +35,6 @@ namespace ToursSoft.Data.Models
         public Guid TourId { get; set; }
         public virtual Tour Tour { get; set; }
 
-        /// <summary>
-        /// Group of people, which managers add in this excursion
-        /// </summary>
-//        [ForeignKey("ManagersGroup")]
-//        [NotMapped]
-//        public ICollection<Guid> ManagersGroupId { get; set; }
-//        public virtual ManagersGroup ManagersGroup { get; set; }
-        //public virtual ICollection<ManagersGroup> ManagersGroups { get; set; }
-
         ////TO DO: do it
         public bool GetCapacity()
         {
