@@ -40,7 +40,7 @@ namespace ToursSoft.Data.Models.Users
         /// <summary>
         /// User phone
         /// </summary>
-        public int PhoneNumber { get; set; }
+        public long PhoneNumber { get; set; }
 
         /// <summary>
         /// User login

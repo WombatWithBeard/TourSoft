@@ -51,14 +51,14 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Changing status of the excursion
         /// </summary>
-        /// <param name="guid">Excursion ID</param>
+        /// <param name="excursion"></param>
         /// <returns>Ok, or bad request</returns>
-        [HttpPut]
-        public IActionResult ChangeStatus([FromBody] Guid guid)
+        [HttpPut("ChangeStatus")]
+        public IActionResult ChangeStatus([FromBody] Excursion excursion)
         {
             try
             {
-                var status = _context.Excursions.FirstOrDefault(x => x.Id == guid);
+                var status = _context.Excursions.FirstOrDefault(x => x.Id == excursion.Id);
                 if (status != null && status.Status)
                 {
                     status.Status = false;
@@ -67,6 +67,7 @@ namespace ToursSoft.Controllers
                 {
                     status.Status = true;
                 }
+                _context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -85,10 +86,9 @@ namespace ToursSoft.Controllers
             try
             {
                 //TO DO: make Admin info
-                var result = JsonConvert.SerializeObject(_context.Excursions.Where(a => a.Status)
+                var result = JsonConvert.SerializeObject(_context.Excursions//.Where(a => a.Status)
                     .Select(x => new
                     {
-                        //TO DO: вытащить информацию по людям, через отдельную модель
                         x.DateTime,
                         x.Status,
                         x.Tour.Name,
@@ -108,7 +108,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <param name="excursions"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] List<Excursion> excursions)
         {
             try

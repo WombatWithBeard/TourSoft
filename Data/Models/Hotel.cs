@@ -32,6 +32,6 @@ namespace ToursSoft.Data.Models
         /// <summary>
         /// Info about phone number of the hotel
         /// </summary>
-        public int PhoneNumber { get; set; }
+        public long PhoneNumber { get; set; }
     }
 }

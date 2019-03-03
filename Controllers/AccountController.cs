@@ -48,7 +48,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("Invalid login or password");
+                return BadRequest(e.ToString());
             }
             //TO DO:
             return Ok();

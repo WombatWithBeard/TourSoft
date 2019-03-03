@@ -24,16 +24,18 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update info about hotel
         /// </summary>
-        /// <param name="hotel"></param>
+        /// <param name="hotels"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Hotel hotel)
+        public async Task<IActionResult> Update([FromBody] List<Hotel> hotels)
         {
             try
             {
-                _context.Hotels.Update(hotel);
+                foreach (var hotel in hotels)
+                {
+                    _context.Hotels.Update(hotel);  
+                }
                 await  _context.SaveChangesAsync();
-
             }
             catch (Exception e)
             {

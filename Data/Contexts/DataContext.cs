@@ -40,8 +40,5 @@ namespace ToursSoft.Data.Contexts
             modelBuilder.Entity<Person>().ToTable("Person");
             modelBuilder.Entity<Tour>().ToTable("Tour");
         }
-
-        //         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //             => optionsBuilder.UseNpgsql(@"host=localhost;port=5432;database=tours;username=postgres;password=postgres");
     }
  }

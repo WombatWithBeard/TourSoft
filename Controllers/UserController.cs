@@ -32,7 +32,6 @@ namespace ToursSoft.Controllers
             {
                 foreach (var userid in usersId)
                 {
-                    //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
                     var user = _context.Users.FirstOrDefault(x => x.Id == userid.Id);
                     if (user != null)
                     {
@@ -83,6 +82,7 @@ namespace ToursSoft.Controllers
         {
             try
             {
+                //TO DO: Check for this login in the DB
                 foreach (var user in users)
                 {
                     await _context.Users.AddAsync(user);

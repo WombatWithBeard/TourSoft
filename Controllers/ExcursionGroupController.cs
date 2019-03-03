@@ -21,6 +21,7 @@ namespace ToursSoft.Controllers
         }
                 
         //TO DO: Check tour capacity
+        //TO DO: Get
         
         /// <summary>
         /// Add info about excursion group
@@ -63,7 +64,6 @@ namespace ToursSoft.Controllers
             {
                 foreach (var excursionGroupId in excursionGroupsId)
                 {
-                    //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
                     var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupId.Id);
                     if (excursionGroup != null)
                     {
@@ -76,7 +76,7 @@ namespace ToursSoft.Controllers
             {
                 return BadRequest(e.ToString());
             }
-            return Ok("User was deleted successfully");
+            return Ok("Excursion group was deleted successfully");
         }
     }
 }
