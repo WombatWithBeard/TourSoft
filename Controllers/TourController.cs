@@ -27,17 +27,20 @@ namespace ToursSoft.Controllers
         /// <param name="tourId"></param>
         /// <returns>Ok, or badrequest</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] Guid tourId)
+        public async Task<IActionResult> Delete([FromBody] List<Tour> toursId)
         {
             try
             {
-                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
-                var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId);
-                if (tour != null)
+                foreach (var tourId in toursId)
                 {
-                    _context.Tours.Remove(tour);
-                    await _context.SaveChangesAsync();
+                    var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId.Id);
+                    if (tour != null)
+                    {
+                        _context.Tours.Remove(tour);
+                    }
                 }
+                await _context.SaveChangesAsync();
+                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
             }
             catch (Exception e)
             {
@@ -72,7 +75,7 @@ namespace ToursSoft.Controllers
         }
         
         /// <summary>
-        /// 
+        /// Create new tours
         /// </summary>
         /// <param name="tours"></param>
         /// <returns>Ok, or badrequest</returns>
@@ -94,6 +97,10 @@ namespace ToursSoft.Controllers
             return Ok("New tour was added successfully");
         }
 
+        /// <summary>
+        /// Get info about all tours
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Get()
         {

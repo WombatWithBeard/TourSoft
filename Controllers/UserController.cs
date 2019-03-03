@@ -20,18 +20,26 @@ namespace ToursSoft.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Delete user by id
+        /// </summary>
+        /// <param name="usersId"></param>
+        /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] Guid userId)
+        public async Task<IActionResult> Delete([FromBody] List<User> usersId)
         {
             try
             {
-                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
-                var user = _context.Users.FirstOrDefault(x => x.Id == userId);
-                if (user != null)
+                foreach (var userid in usersId)
                 {
-                    _context.Users.Remove(user);
-                    await _context.SaveChangesAsync();
+                    //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
+                    var user = _context.Users.FirstOrDefault(x => x.Id == userid.Id);
+                    if (user != null)
+                    {
+                        _context.Users.Remove(user);
+                    }
                 }
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -40,6 +48,11 @@ namespace ToursSoft.Controllers
             return Ok("User was deleted successfully");
         }
 
+        /// <summary>
+        /// Update user info
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] List<User> users)
         {
@@ -60,6 +73,11 @@ namespace ToursSoft.Controllers
             return Ok("Info was updated successfully");
         }
         
+        /// <summary>
+        /// Create new user
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<User> users)
         {
@@ -78,6 +96,10 @@ namespace ToursSoft.Controllers
             return Ok("User was added successfully");
         }
 
+        /// <summary>
+        /// Get info about users
+        /// </summary>
+        /// <returns></returns>
         //TO DO: Check for admin and return more info? 
         [HttpGet]
         public IActionResult Get()
@@ -88,7 +110,6 @@ namespace ToursSoft.Controllers
                     x.Company,
                     x.PhoneNumber,
                     x.Id,
-                    x.Password,
                 })
             );
             return new ObjectResult(result);

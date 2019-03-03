@@ -22,6 +22,30 @@ namespace ToursSoft.Controllers
         }
 
         /// <summary>
+        /// Delete excursion by id
+        /// </summary>
+        /// <param name="excursionsId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] List<Excursion> excursionsId)
+        {
+            try
+            {
+                foreach (var excursionid in excursionsId)
+                {
+                    var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
+                    _context.Excursions.Remove(excursion);
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+            return Ok("Excursion was deleted successfully");
+        }
+
+        /// <summary>
         /// Changing status of the excursion
         /// </summary>
         /// <param name="guid">Excursion ID</param>

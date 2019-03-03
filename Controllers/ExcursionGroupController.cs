@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -53,18 +54,21 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete excursiongroup by id
         /// </summary>
-        /// <param name="excrusionGroupId"></param>
+        /// <param name="excursionGroupsId"></param>
         /// <returns>Ok, or badrequest</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] Guid excrusionGroupId)
+        public async Task<IActionResult> Delete([FromBody] List<ExcursionGroup> excursionGroupsId)
         {
             try
             {
-                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
-                var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excrusionGroupId);
-                if (excursionGroup != null)
+                foreach (var excursionGroupId in excursionGroupsId)
                 {
-                    _context.ExcursionGroups.Remove(excursionGroup);
+                    //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
+                    var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupId.Id);
+                    if (excursionGroup != null)
+                    {
+                        _context.ExcursionGroups.Remove(excursionGroup);
+                    }
                     await _context.SaveChangesAsync();
                 }
             }

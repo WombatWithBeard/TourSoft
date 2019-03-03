@@ -35,11 +35,10 @@ namespace ToursSoft.Data.Contexts
             modelBuilder.Entity<Tour>().ToTable("Tour");
             modelBuilder.Entity<Hotel>().ToTable("Hotel");
             modelBuilder.Entity<TourPrice>().ToTable("TourPrice");
-            modelBuilder.Entity<ExcursionGroup>().ToTable("ManagersGroup");
+            modelBuilder.Entity<ExcursionGroup>().ToTable("ExcursionGroup");
             modelBuilder.Entity<Excursion>().ToTable("Excursion");
             modelBuilder.Entity<Person>().ToTable("Person");
-
-            modelBuilder.Entity<Tour>();
+            modelBuilder.Entity<Tour>().ToTable("Tour");
         }
 
         //         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

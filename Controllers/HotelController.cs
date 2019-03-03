@@ -95,20 +95,23 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete hotel by id
         /// </summary>
-        /// <param name="hotelId"></param>
+        /// <param name="hotelsId"></param>
         /// <returns>Ok, or badrequest</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] Guid hotelId)
+        public async Task<IActionResult> Delete([FromBody] List<Hotel> hotelsId)
         {
             try
             {
-                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
-                var hotel = _context.Hotels.FirstOrDefault(x => x.Id == hotelId);
-                if (hotel != null)
+                foreach (var hotelId in hotelsId)
                 {
-                    _context.Hotels.Remove(hotel);
-                    await _context.SaveChangesAsync();
+                    //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
+                    var hotel = _context.Hotels.FirstOrDefault(x => x.Id == hotelId.Id);
+                    if (hotel != null)
+                    {
+                        _context.Hotels.Remove(hotel);
+                    }
                 }
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
