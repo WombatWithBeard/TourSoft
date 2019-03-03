@@ -24,8 +24,8 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete tour by id
         /// </summary>
-        /// <param name="tourId"></param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <param name="toursId"></param>
+        /// <returns>Ok, or bad request</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] List<Tour> toursId)
         {
@@ -53,7 +53,7 @@ namespace ToursSoft.Controllers
         /// Update info about tours
         /// </summary>
         /// <param name="tours"></param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] List<Tour> tours)
         {
@@ -78,7 +78,7 @@ namespace ToursSoft.Controllers
         /// Create new tours
         /// </summary>
         /// <param name="tours"></param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Tour> tours)
         {

@@ -26,7 +26,7 @@ namespace ToursSoft.Controllers
         /// Add info about excursion group
         /// </summary>
         /// <param name="excursionGroup">ExcursionGroup</param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] ExcursionGroup excursionGroup)
         {
@@ -52,10 +52,10 @@ namespace ToursSoft.Controllers
         }
         
         /// <summary>
-        /// Delete excursiongroup by id
+        /// Delete excursion group by id
         /// </summary>
         /// <param name="excursionGroupsId"></param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] List<ExcursionGroup> excursionGroupsId)
         {

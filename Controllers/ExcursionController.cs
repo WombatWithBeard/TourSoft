@@ -34,7 +34,10 @@ namespace ToursSoft.Controllers
                 foreach (var excursionid in excursionsId)
                 {
                     var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
-                    _context.Excursions.Remove(excursion);
+                    if (excursion != null)
+                    {
+                        _context.Excursions.Remove(excursion);  
+                    }
                 }
                 await _context.SaveChangesAsync();
             }
@@ -49,18 +52,18 @@ namespace ToursSoft.Controllers
         /// Changing status of the excursion
         /// </summary>
         /// <param name="guid">Excursion ID</param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpPut]
-        public async Task<IActionResult> ChangeStatus([FromBody] Guid guid)
+        public IActionResult ChangeStatus([FromBody] Guid guid)
         {
             try
             {
                 var status = _context.Excursions.FirstOrDefault(x => x.Id == guid);
-                if (status.Status)
+                if (status != null && status.Status)
                 {
                     status.Status = false;
                 }
-                else if (status.Status == false)
+                else if (status != null && status.Status == false)
                 {
                     status.Status = true;
                 }
@@ -75,7 +78,7 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Get data about active excursion. If user is admin, return more information
         /// </summary>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpGet]
         public IActionResult Get()//([FromBody] Guid guidUser)
         {
@@ -101,10 +104,34 @@ namespace ToursSoft.Controllers
         }
 
         /// <summary>
+        /// Update info about excursion
+        /// </summary>
+        /// <param name="excursions"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] List<Excursion> excursions)
+        {
+            try
+            {
+                foreach (var excursion in excursions)
+                {
+                    _context.Excursions.Update(excursion);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+            return Ok();
+        }
+
+        /// <summary>
         /// Creating new excursion
         /// </summary>
         /// <param name="excursions">excursion info</param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Excursion> excursions)
         {

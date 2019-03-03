@@ -25,7 +25,7 @@ namespace ToursSoft.Controllers
         /// Update info about hotel
         /// </summary>
         /// <param name="hotel"></param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] Hotel hotel)
         {
@@ -47,7 +47,7 @@ namespace ToursSoft.Controllers
         /// Add new hotels
         /// </summary>
         /// <param name="hotels"></param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] List<Hotel> hotels)
         {
@@ -70,7 +70,7 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Get info about hotels
         /// </summary>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpGet]
         public IActionResult Get()
         {
@@ -96,7 +96,7 @@ namespace ToursSoft.Controllers
         /// Delete hotel by id
         /// </summary>
         /// <param name="hotelsId"></param>
-        /// <returns>Ok, or badrequest</returns>
+        /// <returns>Ok, or bad request</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] List<Hotel> hotelsId)
         {
