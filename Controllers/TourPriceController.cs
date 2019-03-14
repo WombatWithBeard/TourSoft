@@ -12,7 +12,6 @@ namespace ToursSoft.Controllers
 {
     public class TourPriceController : Controller
     {
-        //TO DO: CRUD
         private readonly DataContext _context;
 
         public TourPriceController(DataContext context)
@@ -21,18 +20,18 @@ namespace ToursSoft.Controllers
         }
 
         /// <summary>
-        /// Delete user by id
+        /// Delete price by id
         /// </summary>
         /// <param name="pricesId"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] List<TourPrice> pricesId)
+        public async Task<IActionResult> Delete([FromBody] List<TourPrice> tourPricesid)
         {
             try
             {
-                foreach (var priceId in pricesId)
+                foreach (var tourPriceid in tourPricesid)
                 {
-                    var price = _context.TourPrices.FirstOrDefault(x => x.Id == priceId.Id);
+                    var price = _context.TourPrices.FirstOrDefault(x => x.Id == tourPriceid.Id);
                     if (price != null)
                     {
                         _context.TourPrices.Remove(price);
@@ -44,24 +43,24 @@ namespace ToursSoft.Controllers
             {
                 return BadRequest(e.ToString());
             }
-            return Ok("User was deleted successfully");
+            return Ok("Price was deleted successfully");
         }
 
         /// <summary>
         /// Update user info
         /// </summary>
-        /// <param name="users"></param>
+        /// <param name="tourPrices"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<User> users)
+        public async Task<IActionResult> Update([FromBody] List<TourPrice> tourPrices)
         {
             try
             {
-                foreach (var user in users)
+                foreach (var tourPrice in tourPrices)
                 {
-                    _context.Users.Update(user);
+                    _context.TourPrices.Update(tourPrice);
                 }
-                await  _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
             }
             catch (Exception e)
@@ -75,19 +74,19 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Create new user
         /// </summary>
-        /// <param name="users"></param>
+        /// <param name="tourPrices"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<User> users)
+        public async Task<IActionResult> Add([FromBody] List<TourPrice> tourPrices)
         {
             try
             {
                 //TO DO: Check for this login in the DB
-                foreach (var user in users)
+                foreach (var tourPrice in tourPrices)
                 {
-                    await _context.Users.AddAsync(user);
+                    await _context.TourPrices.AddAsync(tourPrice);
                 }
-                await  _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -104,11 +103,11 @@ namespace ToursSoft.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var result = JsonConvert.SerializeObject(_context.Users.Select(x => new
+            var result = JsonConvert.SerializeObject(_context.TourPrices.Select(x => new
                 {
-                    x.Name,
-                    x.Company,
-                    x.PhoneNumber,
+                    TourName = x.Tour.Name,
+                    UserName = x.User.Name,
+                    x.Price,
                     x.Id,
                 })
             );
