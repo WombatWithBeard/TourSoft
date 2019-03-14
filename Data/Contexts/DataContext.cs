@@ -6,7 +6,6 @@ namespace ToursSoft.Data.Contexts
  {
      public class DataContext: DbContext
      {
-
         public DbSet<Excursion> Excursions { get; set; }
          
         public DbSet<Hotel> Hotels { get; set; }
