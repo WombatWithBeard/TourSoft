@@ -95,7 +95,7 @@ namespace ToursSoft.Controllers
                 {
                     if (_context.Users.FirstOrDefault(x => x.Login == user.Login) != null)
                     {
-                        return StatusCode(403, "login already in use");
+                        return StatusCode(418, "login already in use");
                     }
                     await _context.Users.AddAsync(user);
                 }

@@ -24,7 +24,7 @@ namespace ToursSoft.Data.Contexts
 
         public DataContext(DbContextOptions<DataContext> options):base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
          
         public DataContext()
@@ -50,8 +50,6 @@ namespace ToursSoft.Data.Contexts
                     "admin", 
                     "admin", 
                     "admin"));
-
-            SaveChanges();
         }
     }
  }
