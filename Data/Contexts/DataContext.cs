@@ -44,12 +44,14 @@ namespace ToursSoft.Data.Contexts
 
             modelBuilder.Entity<User>().HasData(
                 new User(Guid.NewGuid(), 
-                    "Admin", 
-                    "ThisCompany", 
+                    "admin", 
+                    "admin", 
                     123, 
-                    "root", 
-                    "PashaNeLoh", 
+                    "admin", 
+                    "admin", 
                     "admin"));
+
+            SaveChanges();
         }
     }
  }

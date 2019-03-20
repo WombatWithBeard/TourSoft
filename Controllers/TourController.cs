@@ -10,11 +10,12 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Tour controller withs CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize(Roles = "admin")] //TODO:
     public class TourController : Controller
     {
         private readonly DataContext _context;
@@ -26,7 +27,7 @@ namespace ToursSoft.Controllers
         public TourController(DataContext context)
         {
             _context = context;
-        }       
+        }
 
         /// <summary>
         /// Delete tour by id
@@ -38,14 +39,6 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (User.IsInRole("Admin"))
-                {
-                    
-                }
-                else
-                {
-                    return Forbid("Access denied");
-                }
                 foreach (var tourId in toursId)
                 {
                     var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId.Id);

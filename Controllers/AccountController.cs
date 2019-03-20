@@ -13,6 +13,7 @@ using ToursSoft.ViewModels;
 
 namespace ToursSoft.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Account controller, with login, authorisation and logout functions
     /// </summary>
@@ -30,11 +31,14 @@ namespace ToursSoft.Controllers
             _context = context;
         }
         
+        /// <summary>
+        /// Default get page
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Login()
         {
             return BadRequest();
-            //return View();
         }
 
         /// <summary>
@@ -65,7 +69,6 @@ namespace ToursSoft.Controllers
             {
                 return BadRequest(e.ToString());
             }
-            //TO DO:
             return Ok();
         }
         

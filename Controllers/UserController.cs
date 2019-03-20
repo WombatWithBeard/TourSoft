@@ -10,11 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ToursSoft.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// User controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "admin")] //TODO: check authorize role
     public class UserController: Controller
     {
         private readonly DataContext _context;
@@ -38,14 +39,6 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (User.IsInRole("Admin"))
-                {
-                    
-                }
-                else
-                {
-                    return Forbid("Access denied");
-                }
                 foreach (var userid in usersId)
                 {
                     var user = _context.Users.FirstOrDefault(x => x.Id == userid.Id);
@@ -98,12 +91,15 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                //TO DO: Check for this login in the DB
                 foreach (var user in users)
                 {
+                    if (_context.Users.FirstOrDefault(x => x.Login == user.Login) != null)
+                    {
+                        return StatusCode(403, "login already in use");
+                    }
                     await _context.Users.AddAsync(user);
                 }
-                await  _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -116,7 +112,7 @@ namespace ToursSoft.Controllers
         /// Get info about users
         /// </summary>
         /// <returns></returns>
-        //TO DO: Check for admin and return more info? 
+        //TODO: Check for admin and return more info? 
         [HttpGet]
         public IActionResult Get()
         {

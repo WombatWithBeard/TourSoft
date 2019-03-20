@@ -10,11 +10,12 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Hotel controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize]
+    //[Authorize] //TODO:
     public class HotelController : Controller
     {
         private readonly DataContext _context;
@@ -38,19 +39,18 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (User.IsInRole("Admin"))
+                if (User.IsInRole("admin"))
                 {
-                    
+                    foreach (var hotel in hotels)
+                    {
+                        _context.Hotels.Update(hotel);  
+                    }
+                    await  _context.SaveChangesAsync();
                 }
                 else
                 {
                     return Forbid("Access denied");
                 }
-                foreach (var hotel in hotels)
-                {
-                    _context.Hotels.Update(hotel);  
-                }
-                await  _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -72,7 +72,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var hotel in hotels)
                 {
-                    //TO DO:
+                    //TODO:
                     _context.Hotels.Add(hotel);
                 }
                 await  _context.SaveChangesAsync();
@@ -119,16 +119,22 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                foreach (var hotelId in hotelsId)
+                if (User.IsInRole("admin"))
                 {
-                    //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
-                    var hotel = _context.Hotels.FirstOrDefault(x => x.Id == hotelId.Id);
-                    if (hotel != null)
+                    foreach (var hotelId in hotelsId)
                     {
-                        _context.Hotels.Remove(hotel);
+                        var hotel = _context.Hotels.FirstOrDefault(x => x.Id == hotelId.Id);
+                        if (hotel != null)
+                        {
+                            _context.Hotels.Remove(hotel);
+                        }
                     }
+                    await _context.SaveChangesAsync(); 
                 }
-                await _context.SaveChangesAsync();
+                else
+                {
+                    return Forbid("Access denied");
+                }
             }
             catch (Exception e)
             {

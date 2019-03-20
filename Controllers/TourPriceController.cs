@@ -11,11 +11,12 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Tour price controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize]
+    //[Authorize] //TODO:
     public class TourPriceController : Controller
     {
         private readonly DataContext _context;
@@ -39,21 +40,20 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (User.IsInRole("Admin"))
+                if (User.IsInRole("admin"))
                 {
-                    
+                    foreach (var tourPriceid in tourPricesid)
+                    {
+                        var price = _context.TourPrices.FirstOrDefault(x => x.Id == tourPriceid.Id);
+                        if (price != null)
+                        {
+                            _context.TourPrices.Remove(price);
+                        }
+                    }
                 }
                 else
                 {
                     return Forbid("Access denied");
-                }
-                foreach (var tourPriceid in tourPricesid)
-                {
-                    var price = _context.TourPrices.FirstOrDefault(x => x.Id == tourPriceid.Id);
-                    if (price != null)
-                    {
-                        _context.TourPrices.Remove(price);
-                    }
                 }
                 await _context.SaveChangesAsync();
             }
@@ -79,7 +79,6 @@ namespace ToursSoft.Controllers
                     _context.TourPrices.Update(tourPrice);
                 }
                 await _context.SaveChangesAsync();
-
             }
             catch (Exception e)
             {
@@ -116,17 +115,32 @@ namespace ToursSoft.Controllers
         /// Get info about users
         /// </summary>
         /// <returns></returns>
-        //TO DO: Check for admin and return more info? 
+        //TODO: Check for admin and return more info? 
         [HttpGet]
-        public IActionResult Get([FromBody] User user)
+        public IActionResult Get()
         {
-            var result = JsonConvert.SerializeObject(_context.TourPrices.Where(u => u.User.Id == user.Id).Select(x => new
-                {
-                    TourName = x.Tour.Name,
-                    x.Price,
-                    x.Id,
-                })
-            );
+            object result;
+            if (User.IsInRole("admin"))
+            {
+                result = JsonConvert.SerializeObject(_context.TourPrices.Select(x => new
+                    {
+                        TourName = x.Tour.Name,
+                        x.User.Name,
+                        x.Price,
+                        x.Id,
+                    })
+                );
+            }
+            else
+            {
+                result = JsonConvert.SerializeObject(_context.TourPrices.Where(u => u.User.Login == User.Identity.Name).Select(x => new
+                    {
+                        TourName = x.Tour.Name,
+                        x.Price,
+                        x.Id,
+                    })
+                );
+            }
             return new ObjectResult(result);
         }
     }

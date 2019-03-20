@@ -5,7 +5,7 @@ using ToursSoft.Data.Models.Interface;
 namespace ToursSoft.Data
 {
     
-    //TO DO: Entity info https://www.lucidchart.com/documents/edit/883a5e11-34ba-43d2-a1bc-13a21e7f2119/0
+    //TODO: Entity info https://www.lucidchart.com/documents/edit/883a5e11-34ba-43d2-a1bc-13a21e7f2119/0
     
     /// <summary>
     /// Base entity

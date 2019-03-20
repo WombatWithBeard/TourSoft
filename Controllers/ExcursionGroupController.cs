@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,12 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Excursion group controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize]
+    //[Authorize] //TODO:
     public class ExcursionGroupController : Controller
     {
         private readonly DataContext _context;
@@ -36,21 +38,36 @@ namespace ToursSoft.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromBody] Excursion excursion)
         {
-            if (User.IsInRole("Admin"))
+            try
             {
-                    
+                object result;
+                if (User.IsInRole("Admin"))
+                {
+                    result = _context.ExcursionGroups.Where(e => e.ExcursionId == excursion.Id)
+                        .Select(x => new
+                        {
+                            x.User.Name,
+                            x.Person,
+                            x.Id
+                        });
+                }
+                else
+                {
+                    result = _context.ExcursionGroups.Where(e => e.ExcursionId == excursion.Id && 
+                                                                     e.User.Login == User.Identity.Name)
+                        .Select(x => new
+                        {
+                            x.User.Name,
+                            x.Person,
+                            x.Id
+                        });
+                }
+                return new ObjectResult(result);
             }
-            else
+            catch (Exception e)
             {
-                return Forbid("Access denied");
+                return BadRequest(e.ToString());
             }
-            var result = _context.ExcursionGroups.Where(e => e.ExcursionId == excursion.Id).Select(x => new
-            {
-                x.User.Name,
-                x.Person,
-                x.Id
-            });
-            return new ObjectResult(result);
         }
 
         /// <summary>
@@ -91,10 +108,10 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                Console.WriteLine();
                 if (_context.Excursions.Where(x => x.Id == excursionGroup.ExcursionId && x.Status)
                     .Select(x => true).FirstOrDefault(x => x))
                 {
+                    //TODO: check for capacity
                     _context.ExcursionGroups.Add(excursionGroup);
                     await  _context.SaveChangesAsync();
                 }

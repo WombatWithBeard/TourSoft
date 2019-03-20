@@ -11,11 +11,12 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Excursion controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize]
+    //[Authorize] //TODO:
     public class ExcursionController : Controller
     {
         private readonly DataContext _context;
@@ -71,6 +72,7 @@ namespace ToursSoft.Controllers
         [HttpPut("ChangeStatus")]
         public IActionResult ChangeStatus([FromBody] Excursion excursion)
         {
+            //TODO: make scheduler for status, i think
             try
             {
                 if (User.IsInRole("admin"))
@@ -107,15 +109,31 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                var result = JsonConvert.SerializeObject(_context.Excursions.Where(s => s.Status)
-                    .Select(x => new
-                    {
-                        x.DateTime,
-                        x.Status,
-                        x.Tour.Name,
-                        x.Tour.Capacity,
-                        x.Id
-                    }));
+                object result;
+                
+                if (User.IsInRole("admin"))
+                {
+                    result = JsonConvert.SerializeObject(_context.Excursions
+                        .Select(x => new
+                        {
+                            x.DateTime,
+                            x.Status,
+                            x.Tour.Name,
+                            x.Tour.Capacity,
+                            x.Id
+                        }));
+                }
+                else
+                {
+                    result = JsonConvert.SerializeObject(_context.Excursions.Where(s => s.Status)
+                        .Select(x => new
+                        {
+                            x.DateTime,
+                            x.Tour.Name,
+                            x.Tour.Capacity,
+                            x.Id
+                        }));
+                }
                 return new ObjectResult(result);
             }
             catch (Exception e)
@@ -134,12 +152,19 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                foreach (var excursion in excursions)
+                if (User.IsInRole("Admin"))
                 {
-                    _context.Excursions.Update(excursion);
-                }
+                    foreach (var excursion in excursions)
+                    {
+                        _context.Excursions.Update(excursion);
+                    }
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();  
+                }
+                else
+                {
+                    return Forbid("Access denied");
+                }
             }
             catch (Exception e)
             {
@@ -158,11 +183,18 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                foreach (var excursion in excursions)
+                if (User.IsInRole("Admin"))
                 {
-                    await _context.Excursions.AddAsync(excursion);
+                    foreach (var excursion in excursions)
+                    {
+                        await _context.Excursions.AddAsync(excursion);
+                    }
+                    await _context.SaveChangesAsync(); 
                 }
-                await _context.SaveChangesAsync();
+                else
+                {
+                    return Forbid("Access denied");
+                }
             }
             catch (Exception e)
             {

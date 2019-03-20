@@ -7,6 +7,13 @@ namespace ToursSoft.Data.Models
     [Table("Excursion")]
     public class Excursion: Model
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="dateTime"></param>
+        /// <param name="status"></param>
+        /// <param name="tourId"></param>
         public Excursion(Guid id, DateTime dateTime, bool status, Guid tourId) : base(id)
         {
             DateTime = dateTime;
@@ -14,10 +21,16 @@ namespace ToursSoft.Data.Models
             TourId = tourId;
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Excursion()
         {
         }
 
+        /// <summary>
+        /// Date and time of excursion
+        /// </summary>
         [Required]
         public DateTime DateTime { get; set; }
         
@@ -35,7 +48,7 @@ namespace ToursSoft.Data.Models
         public Guid TourId { get; set; }
         public virtual Tour Tour { get; set; }
 
-        ////TO DO: do it
+        ////TODO: do it
         public bool GetCapacity()
         {
             return true;
