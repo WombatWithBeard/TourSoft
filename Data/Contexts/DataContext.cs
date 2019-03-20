@@ -1,3 +1,5 @@
+using System;
+using Microsoft.AspNetCore.Identity.UI.Pages.Account.Manage.Internal;
 using Microsoft.EntityFrameworkCore;
 using ToursSoft.Data.Models;
 using ToursSoft.Data.Models.Users;
@@ -21,8 +23,9 @@ namespace ToursSoft.Data.Contexts
         public DbSet<Person> Persons { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options):base(options)
-         {
-         }
+        {
+            Database.EnsureCreated();
+        }
          
         public DataContext()
          { 
@@ -38,6 +41,15 @@ namespace ToursSoft.Data.Contexts
             modelBuilder.Entity<Excursion>().ToTable("Excursion");
             modelBuilder.Entity<Person>().ToTable("Person");
             modelBuilder.Entity<Tour>().ToTable("Tour");
+
+            modelBuilder.Entity<User>().HasData(
+                new User(Guid.NewGuid(), 
+                    "Admin", 
+                    "ThisCompany", 
+                    123, 
+                    "root", 
+                    "PashaNeLoh", 
+                    "admin"));
         }
     }
  }

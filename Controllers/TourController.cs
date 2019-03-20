@@ -10,12 +10,19 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
+    /// <summary>
+    /// Tour controller withs CRUD
+    /// </summary>
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class TourController : Controller
     {
         private readonly DataContext _context;
         
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="context"></param>
         public TourController(DataContext context)
         {
             _context = context;
@@ -31,6 +38,14 @@ namespace ToursSoft.Controllers
         {
             try
             {
+                if (User.IsInRole("Admin"))
+                {
+                    
+                }
+                else
+                {
+                    return Forbid("Access denied");
+                }
                 foreach (var tourId in toursId)
                 {
                     var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId.Id);
@@ -40,7 +55,6 @@ namespace ToursSoft.Controllers
                     }
                 }
                 await _context.SaveChangesAsync();
-                //TO DO: Проверка зависимостей? Функционал переопределения зависимостей
             }
             catch (Exception e)
             {
@@ -63,7 +77,7 @@ namespace ToursSoft.Controllers
                 {
                     _context.Tours.Update(tour);
                 }
-                await  _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
             }
             catch (Exception e)
@@ -88,7 +102,7 @@ namespace ToursSoft.Controllers
                 {
                     await _context.Tours.AddAsync(tour);
                 }
-                await  _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {

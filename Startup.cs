@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +29,7 @@ namespace ToursSoft
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //var con = "Host=localhost;Port=5432;Database=tours;Username=postgres;Password=postgres";
+            //var con = "Host=localhost;Port=5432;Database=tours;Username=postgres;Password=postgres;";
             services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>(options => 
                 { options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));});
 
@@ -35,9 +39,21 @@ namespace ToursSoft
                 .AddCookie(options =>
                 {
                     options.LoginPath = new PathString("/Account/Login");
+                    options.LogoutPath = new PathString("/Account/Logout");
                 });
             
-            services.AddSwaggerGen(x => { x.SwaggerDoc("v1", new Info {Title = "Tours API", Version = "v1"}); });
+            services.AddSwaggerGen(x =>
+            {
+                x.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "Tours API", 
+                });
+                var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
+                x.IncludeXmlComments(xmlpath);
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,16 +64,17 @@ namespace ToursSoft
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseAuthentication();
             
-            //TO DO: swagger dont work
+            
             app.UseSwagger();
-            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/v1/swagger.json", "Tour API v1"); });
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Tour API v1");
+            });
             
             app.UseMvc();        
-//            app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
-
         }
     }
 }

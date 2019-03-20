@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ToursSoft.Data.Models.Users
 {
     [Table("Person")]
+    [Serializable]
     public class Person: Model
     {
         public Person(Guid id, int adultCount, int childrenCount, int babyCount, double prepayment, double leftToPay, 

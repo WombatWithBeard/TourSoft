@@ -10,7 +10,7 @@ namespace ToursSoft.Data.Models.Users
     {
         private string _password;
 
-        public User(Guid id, string name, string company, int phoneNumber, string login, string password, bool isAdmin) 
+        public User(Guid id, string name, string company, int phoneNumber, string login, string password, string role) 
             : base(id)
         {
             Name = name;
@@ -18,7 +18,7 @@ namespace ToursSoft.Data.Models.Users
             PhoneNumber = phoneNumber;
             Login = login;
             Password = password;
-            IsAdmin = isAdmin;
+            Role = role;
         }
 
         public User()
@@ -59,9 +59,9 @@ namespace ToursSoft.Data.Models.Users
         }
 
         /// <summary>
-        /// attribute: 0 - manager, 1 - admin
+        /// attribute: manager, admin, user
         /// </summary>
         [Required]
-        public bool IsAdmin { get; set; }
+        public string Role { get; set; }
     }
 }

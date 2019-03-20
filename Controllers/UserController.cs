@@ -6,15 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models.Users;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ToursSoft.Controllers
 {
+    /// <summary>
+    /// User controller with CRUD
+    /// </summary>
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class UserController: Controller
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="context"></param>
         public UserController(DataContext context)
         {
             _context = context;
@@ -30,6 +38,14 @@ namespace ToursSoft.Controllers
         {
             try
             {
+                if (User.IsInRole("Admin"))
+                {
+                    
+                }
+                else
+                {
+                    return Forbid("Access denied");
+                }
                 foreach (var userid in usersId)
                 {
                     var user = _context.Users.FirstOrDefault(x => x.Id == userid.Id);

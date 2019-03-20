@@ -4,18 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
+    /// <summary>
+    /// Excursion controller with CRUD
+    /// </summary>
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class ExcursionController : Controller
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="context"></param>
         public ExcursionController(DataContext context)
         {
             _context = context;
@@ -31,15 +39,22 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                foreach (var excursionid in excursionsId)
+                if (User.IsInRole("admin"))
                 {
-                    var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
-                    if (excursion != null)
+                    foreach (var excursionid in excursionsId)
                     {
-                        _context.Excursions.Remove(excursion);  
+                        var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
+                        if (excursion != null)
+                        {
+                            _context.Excursions.Remove(excursion);  
+                        }
                     }
+                    await _context.SaveChangesAsync();
                 }
-                await _context.SaveChangesAsync();
+                else
+                {
+                    return BadRequest("Invalid user role");
+                }
             }
             catch (Exception e)
             {
@@ -58,16 +73,23 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                var status = _context.Excursions.FirstOrDefault(x => x.Id == excursion.Id);
-                if (status != null && status.Status)
+                if (User.IsInRole("admin"))
                 {
-                    status.Status = false;
+                    var status = _context.Excursions.FirstOrDefault(x => x.Id == excursion.Id);
+                    if (status != null && status.Status)
+                    {
+                        status.Status = false;
+                    }
+                    else if (status != null && status.Status == false)
+                    {
+                        status.Status = true;
+                    }
+                    _context.SaveChanges();
                 }
-                else if (status != null && status.Status == false)
+                else
                 {
-                    status.Status = true;
+                    return Forbid("Access denied");
                 }
-                _context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -81,12 +103,11 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <returns>Ok, or bad request</returns>
         [HttpGet]
-        public IActionResult Get()//([FromBody] Guid guidUser)
+        public IActionResult Get()
         {
             try
             {
-                //TO DO: make Admin info
-                var result = JsonConvert.SerializeObject(_context.Excursions//.Where(a => a.Status)
+                var result = JsonConvert.SerializeObject(_context.Excursions.Where(s => s.Status)
                     .Select(x => new
                     {
                         x.DateTime,

@@ -5,24 +5,82 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToursSoft.Data.Contexts;
+using ToursSoft.Data.Models;
 using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Controllers
 {
+    /// <summary>
+    /// Excursion group controller with CRUD
+    /// </summary>
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class ExcursionGroupController : Controller
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="context"></param>
         public ExcursionGroupController(DataContext context)
         {
             _context = context;
         }
-                
-        //TO DO: Check tour capacity
-        //TO DO: Get
-        
+
+        /// <summary>
+        /// Get info about excursion groups
+        /// </summary>
+        /// <param name="excursion"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Get([FromBody] Excursion excursion)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                    
+            }
+            else
+            {
+                return Forbid("Access denied");
+            }
+            var result = _context.ExcursionGroups.Where(e => e.ExcursionId == excursion.Id).Select(x => new
+            {
+                x.User.Name,
+                x.Person,
+                x.Id
+            });
+            return new ObjectResult(result);
+        }
+
+        /// <summary>
+        /// Update excursion groups info
+        /// </summary>
+        /// <param name="excursionGroupsid"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] List<ExcursionGroup> excursionGroupsid)
+        {
+            try
+            {
+                foreach (var excursionGroupid in excursionGroupsid)
+                {
+                    var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupid.Id);
+                    if (excursionGroup != null)
+                    {
+                        _context.ExcursionGroups.Update(excursionGroup);
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+
+            return Ok("Excursion group was deleted successfully");
+        }
+
         /// <summary>
         /// Add info about excursion group
         /// </summary>
@@ -42,7 +100,7 @@ namespace ToursSoft.Controllers
                 }
                 else
                 {
-                    return BadRequest("Uncorrect data");
+                    return BadRequest("Incorrect data");
                 }
             }
             catch (Exception e)

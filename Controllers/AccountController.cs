@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -12,14 +13,28 @@ using ToursSoft.ViewModels;
 
 namespace ToursSoft.Controllers
 {
+    /// <summary>
+    /// Account controller, with login, authorisation and logout functions
+    /// </summary>
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="context"></param>
         public AccountController(DataContext context)
         {
             _context = context;
+        }
+        
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return BadRequest();
+            //return View();
         }
 
         /// <summary>
@@ -65,6 +80,7 @@ namespace ToursSoft.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, _context.Users.FirstOrDefault(x => x.Name == userName)?.Role)
             };
             
             // create object ClaimsIdentity
@@ -78,7 +94,7 @@ namespace ToursSoft.Controllers
         /// Logout user from server
         /// </summary>
         /// <returns>Redirect on Login view</returns>
-        [HttpGet]
+        [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

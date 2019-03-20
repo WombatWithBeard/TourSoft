@@ -10,12 +10,19 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
+    /// <summary>
+    /// Hotel controller with CRUD
+    /// </summary>
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class HotelController : Controller
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="context"></param>
         public HotelController(DataContext context)
         {
             _context = context;
@@ -31,6 +38,14 @@ namespace ToursSoft.Controllers
         {
             try
             {
+                if (User.IsInRole("Admin"))
+                {
+                    
+                }
+                else
+                {
+                    return Forbid("Access denied");
+                }
                 foreach (var hotel in hotels)
                 {
                     _context.Hotels.Update(hotel);  

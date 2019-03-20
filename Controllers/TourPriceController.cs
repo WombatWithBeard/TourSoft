@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
@@ -10,10 +11,19 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Controllers
 {
+    /// <summary>
+    /// Tour price controller with CRUD
+    /// </summary>
+    [Route("api/[controller]")]
+    //[Authorize]
     public class TourPriceController : Controller
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="context"></param>
         public TourPriceController(DataContext context)
         {
             _context = context;
@@ -22,13 +32,21 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete price by id
         /// </summary>
-        /// <param name="pricesId"></param>
+        /// <param name="tourPricesid"></param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] List<TourPrice> tourPricesid)
         {
             try
             {
+                if (User.IsInRole("Admin"))
+                {
+                    
+                }
+                else
+                {
+                    return Forbid("Access denied");
+                }
                 foreach (var tourPriceid in tourPricesid)
                 {
                     var price = _context.TourPrices.FirstOrDefault(x => x.Id == tourPriceid.Id);
@@ -81,7 +99,6 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                //TO DO: Check for this login in the DB
                 foreach (var tourPrice in tourPrices)
                 {
                     await _context.TourPrices.AddAsync(tourPrice);
@@ -92,7 +109,7 @@ namespace ToursSoft.Controllers
             {
                 return BadRequest(e.ToString());
             }
-            return Ok("User was added successfully");
+            return Ok("Price was added successfully");
         }
 
         /// <summary>
@@ -101,12 +118,11 @@ namespace ToursSoft.Controllers
         /// <returns></returns>
         //TO DO: Check for admin and return more info? 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromBody] User user)
         {
-            var result = JsonConvert.SerializeObject(_context.TourPrices.Select(x => new
+            var result = JsonConvert.SerializeObject(_context.TourPrices.Where(u => u.User.Id == user.Id).Select(x => new
                 {
                     TourName = x.Tour.Name,
-                    UserName = x.User.Name,
                     x.Price,
                     x.Id,
                 })
