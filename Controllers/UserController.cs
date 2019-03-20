@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace ToursSoft.Controllers
 {
@@ -19,14 +20,17 @@ namespace ToursSoft.Controllers
     public class UserController: Controller
     {
         private readonly DataContext _context;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
-        public UserController(DataContext context)
+        /// <param name="logger"></param>
+        public UserController(DataContext context, ILogger<UserController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -116,6 +120,7 @@ namespace ToursSoft.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            _logger.LogInformation("User {username} getting info about users", User.Identity.Name);
             var result = JsonConvert.SerializeObject(_context.Users.Select(x => new
                 {
                     x.Name,

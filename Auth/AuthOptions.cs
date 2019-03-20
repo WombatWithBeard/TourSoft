@@ -3,15 +3,38 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ToursSoft.Auth
 {
-    public class AuthOptions
+    /// <summary>
+    /// Auth info
+    /// </summary>
+    public static class AuthOptions
     {
-        public const string ISSUER = "MyAuthServer"; // издатель токена
-        public const string AUDIENCE = "http://localhost:51884/"; // потребитель токена
-        const string KEY = "mysupersecret_secretkey!123";   // ключ для шифрации
-        public const int LIFETIME = 1; // время жизни токена - 1 минута
+        /// <summary>
+        /// token author
+        /// </summary>
+        public const string Issuer = "TourSoftServer";
+        
+        /// <summary>
+        /// token customerD
+        /// </summary>
+        public const string Audience = "TourSoftServer";
+        
+        /// <summary>
+        /// hash key
+        /// </summary>
+        private const string Key = "mysupersecret_secretkey!123";
+        
+        /// <summary>
+        /// lifespan token in minutes
+        /// </summary>
+        public const int Lifetime = 1440;
+        
+        /// <summary>
+        /// Key encoding
+        /// </summary>
+        /// <returns></returns>
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
         }
     }
 }

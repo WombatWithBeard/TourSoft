@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.EntityFrameworkCore;
@@ -22,18 +23,18 @@ namespace ToursSoft
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILogger _logger;
+        
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            _logger = logger;
         }
         
         public IConfiguration Configuration { get; }
         
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //var con = "Host=localhost;Port=5432;Database=tours;Username=postgres;Password=postgres;";
             services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>(options => 
                 { options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));});
 
@@ -47,11 +48,13 @@ namespace ToursSoft
                         // укзывает, будет ли валидироваться издатель при валидации токена
                         ValidateIssuer = true,
                         // строка, представляющая издателя
-                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidIssuer = AuthOptions.Issuer,
+                        
                         // будет ли валидироваться потребитель токена
                         ValidateAudience = true,
                         // установка потребителя токена
-                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidAudience = AuthOptions.Audience,
+                        
                         // будет ли валидироваться время существования
                         ValidateLifetime = true,
  
@@ -62,14 +65,6 @@ namespace ToursSoft
 
                     };
                 });
-            
-//            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//                .AddCookie(options =>
-//                {
-//                    options.LoginPath = new PathString("/Account/Login");
-//                    options.AccessDeniedPath = new PathString("/Account/Login");
-//                    options.LogoutPath = new PathString("/Account/Logout");
-//                });
             
             services.AddSwaggerGen(x =>
             {
@@ -83,14 +78,16 @@ namespace ToursSoft
                 x.IncludeXmlComments(xmlpath);
             });
             
+            _logger.LogInformation("Make configuring");
+            
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             
             if (env.IsDevelopment())
             {
+                _logger.LogInformation("In Development");
                 app.UseDeveloperExceptionPage();
             }
             
@@ -102,8 +99,8 @@ namespace ToursSoft
             {
                 x.SwaggerEndpoint("/swagger/v1/swagger.json", "Tour API v1");
             });
-            
-            app.UseMvc();        
+
+            app.UseMvc();
         }
     }
 }

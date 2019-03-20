@@ -4,9 +4,6 @@ using ToursSoft.Data.Models.Interface;
 
 namespace ToursSoft.Data
 {
-    
-    //TODO: Entity info https://www.lucidchart.com/documents/edit/883a5e11-34ba-43d2-a1bc-13a21e7f2119/0
-    
     /// <summary>
     /// Base entity
     /// </summary>
@@ -14,10 +11,10 @@ namespace ToursSoft.Data
     public class Model: IModel
     {
         /// <summary>
-        /// Contructor
+        /// Constructor
         /// </summary>
         /// <param name="id">Entity Id</param>
-        public Model(Guid id)
+        protected Model(Guid id) //TODO: check for warnings
         {
             Id = id == Guid.Empty ? Guid.NewGuid() : id;
         }

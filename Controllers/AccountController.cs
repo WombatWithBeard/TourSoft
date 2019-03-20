@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.AspNetCore.WebSockets.Internal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using ToursSoft.Auth;
@@ -34,27 +35,17 @@ namespace ToursSoft.Controllers
     public class AccountController : Controller
     {
         private readonly DataContext _context;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
-        public AccountController(DataContext context)
+        public AccountController(DataContext context, ILogger<AccountController> logger)
         {
             _context = context;
+            _logger = logger;
         }
-        
-        /// <summary>
-        /// Default get page
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return BadRequest();
-        }
-
-        
         
         [HttpPost("token")]
         public async Task Token([FromBody]LoginModel model)
@@ -62,19 +53,20 @@ namespace ToursSoft.Controllers
             var identity = GetIdentity(model);
             if (identity == null)
             {
-                Response.StatusCode = 400;
+                Response.StatusCode = 401;
                 await Response.WriteAsync("Invalid username or password.");
+                _logger.LogWarning("Invalid logging with login: " + model.Login);
                 return;
             }
  
             var now = DateTime.UtcNow;
-            // создаем JWT-токен
+            // creating JWT-token
             var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
+                    issuer: AuthOptions.Issuer,
+                    audience: AuthOptions.Audience,
                     notBefore: now,
                     claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.Lifetime)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
              
@@ -84,9 +76,11 @@ namespace ToursSoft.Controllers
                 username = identity.Name
             };
  
-            // сериализация ответа
+            // serializing response
             Response.ContentType = "application/json";
             await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            
+            _logger.LogInformation("Success token granted");
         }
  
         private ClaimsIdentity GetIdentity(LoginModel model)
@@ -106,7 +100,7 @@ namespace ToursSoft.Controllers
                 return claimsIdentity;
             }
  
-            // если пользователя не найдено
+            // if we cant find user
             return null;
         }
         
@@ -119,7 +113,6 @@ namespace ToursSoft.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok();
-            //return RedirectToAction("Login", "Account");
         }
     }
 }
