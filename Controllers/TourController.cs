@@ -27,7 +27,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="logger"></param>
-        public TourController(DataContext context, ILogger logger)
+        public TourController(DataContext context, ILogger<TourController> logger)
         {
             _logger = logger;
             _context = context;

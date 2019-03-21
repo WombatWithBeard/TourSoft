@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using ToursSoft.Data.Contexts;
 
 namespace ToursSoft.Data.Models.Users
 {
@@ -57,5 +59,15 @@ namespace ToursSoft.Data.Models.Users
         /// link on excursion table
         /// </summary>
         public virtual Excursion Excursion { get; set; }
+        
+        ////TODO: do it
+        /// <summary>
+        /// Check capacity of excursion
+        /// </summary>
+        /// <returns></returns>
+        public int GetCapacity()
+        {
+            return Person.BabyCount + Person.AdultCount + Person.ChildrenCount;
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ToursSoft.Data.Contexts;
@@ -15,7 +16,7 @@ namespace ToursSoft.Controllers
     /// Excursion group controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize] //TODO:
+    [Authorize] //TODO:
     public class ExcursionGroupController : Controller
     {
         private readonly DataContext _context;
@@ -26,7 +27,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="logger"></param>
-        public ExcursionGroupController(DataContext context, ILogger logger)
+        public ExcursionGroupController(DataContext context, ILogger<ExcursionGroupController> logger)
         {
             _context = context;
             _logger = logger;
@@ -43,7 +44,7 @@ namespace ToursSoft.Controllers
             try
             {
                 object result;
-                if (User.IsInRole("Admin"))
+                if (User.IsInRole("admin"))
                 {
                     result = _context.ExcursionGroups.Where(e => e.ExcursionId == excursion.Id)
                         .Select(x => new
@@ -116,15 +117,32 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (_context.Excursions.Where(x => x.Id == excursionGroup.ExcursionId && x.Status)
-                    .Select(x => true).FirstOrDefault(x => x))
+                var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionGroup.ExcursionId);
+                if (excursion != null && excursion.Status)
                 {
-                    //TODO: check for capacity
-                    _context.ExcursionGroups.Add(excursionGroup);
+                    var sum = 0;
+                    foreach (var eg in _context.ExcursionGroups.Where(eg => eg.ExcursionId == excursionGroup.ExcursionId))
+                    {
+                        sum += eg.GetCapacity();
+                    }
+
+                    //TODO: Dont work this shit
+                    var b = excursion.Tour.Capacity;
                     
-                    _logger.LogInformation("Try to add new excursionGroup");
+                    if (excursion.Tour.Capacity <= (sum + excursionGroup.GetCapacity()))
+                    {
+                        _context.ExcursionGroups.Add(excursionGroup);
                     
-                    await  _context.SaveChangesAsync();
+                        _logger.LogInformation("Try to add new excursionGroup");
+                    
+                        await  _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Not enough excursion space. Current workload {0} / {1}", 
+                            excursion.Tour.Capacity, sum);
+                        return BadRequest("Not enough excursion space");
+                    }
                 }
                 else
                 {

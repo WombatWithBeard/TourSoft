@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -15,7 +16,7 @@ namespace ToursSoft.Controllers
     /// Hotel controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize] //TODO:
+    [Authorize] //TODO:
     public class HotelController : Controller
     {
         private readonly DataContext _context;
@@ -26,7 +27,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="logger"></param>
-        public HotelController(DataContext context, ILogger logger)
+        public HotelController(DataContext context, ILogger<HotelController> logger)
         {
             _logger = logger;
             _context = context;

@@ -135,6 +135,8 @@ namespace ToursSoft.Controllers
                     x.Name,
                     x.Company,
                     x.PhoneNumber,
+                    x.Login,
+                    x.Role,
                     x.Id,
                 })
             );

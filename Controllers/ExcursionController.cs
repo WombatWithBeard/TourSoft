@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -15,7 +16,7 @@ namespace ToursSoft.Controllers
     /// Excursion controller with CRUD
     /// </summary>
     [Route("api/[controller]")]
-    //[Authorize] //TODO:
+    [Authorize] //TODO:
     public class ExcursionController : Controller
     {
         private readonly DataContext _context;
@@ -26,7 +27,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="logger"></param>
-        public ExcursionController(DataContext context, ILogger logger)
+        public ExcursionController(DataContext context, ILogger<ExcursionController> logger)
         {
             _context = context;
             _logger = logger;
@@ -165,7 +166,7 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (User.IsInRole("Admin"))
+                if (User.IsInRole("admin"))
                 {
                     foreach (var excursion in excursions)
                     {
@@ -200,7 +201,7 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (User.IsInRole("Admin"))
+                if (User.IsInRole("admin"))
                 {
                     foreach (var excursion in excursions)
                     {
