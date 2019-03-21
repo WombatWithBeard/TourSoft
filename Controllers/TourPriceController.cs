@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
-using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Controllers
 {
@@ -27,6 +25,7 @@ namespace ToursSoft.Controllers
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="logger"></param>
         public TourPriceController(DataContext context, ILogger logger)
         {
             _logger = logger;
@@ -50,12 +49,14 @@ namespace ToursSoft.Controllers
                         var price = _context.TourPrices.FirstOrDefault(x => x.Id == tourPriceid.Id);
                         if (price != null)
                         {
+                            _logger.LogInformation("Try to delete tourprice: {0}", price.Id);
                             _context.TourPrices.Remove(price);
                         }
                     }
                 }
                 else
                 {
+                    _logger.LogWarning("Access denied for user {0}", User.Identity.Name);
                     return Forbid("Access denied");
                 }
                 await _context.SaveChangesAsync();
@@ -65,6 +66,8 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            
+            _logger.LogInformation("TourPrice was deleted by user: {0}", User.Identity.Name);
             return Ok("Price was deleted successfully");
         }
 
@@ -80,6 +83,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var tourPrice in tourPrices)
                 {
+                    _logger.LogInformation("Try to update tourPrice: {0}", tourPrice.Id);
                     _context.TourPrices.Update(tourPrice);
                 }
                 await _context.SaveChangesAsync();
@@ -90,6 +94,7 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
 
+            _logger.LogInformation("TourPrice was updated by user: {0}", User.Identity.Name);
             return Ok("Info was updated successfully");
         }
         
@@ -105,6 +110,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var tourPrice in tourPrices)
                 {
+                    _logger.LogInformation("Try to add new tourPrice");
                     await _context.TourPrices.AddAsync(tourPrice);
                 }
                 await _context.SaveChangesAsync();
@@ -114,6 +120,7 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("TourPrice was added by user: {0}", User.Identity.Name);
             return Ok("Price was added successfully");
         }
 
@@ -147,6 +154,7 @@ namespace ToursSoft.Controllers
                     })
                 );
             }
+            _logger.LogInformation("User {0} get tourprices info", User.Identity.Name);
             return new ObjectResult(result);
         }
     }

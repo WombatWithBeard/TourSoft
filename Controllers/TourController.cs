@@ -26,6 +26,7 @@ namespace ToursSoft.Controllers
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="logger"></param>
         public TourController(DataContext context, ILogger logger)
         {
             _logger = logger;
@@ -47,6 +48,7 @@ namespace ToursSoft.Controllers
                     var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId.Id);
                     if (tour != null)
                     {
+                        _logger.LogInformation("Try to delete tour: {0}", tour.Id);
                         _context.Tours.Remove(tour);
                     }
                 }
@@ -57,7 +59,8 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
-            return Ok("User was deleted successfully");
+            _logger.LogInformation("Tour was deleted by user: {0}", User.Identity.Name);
+            return Ok("Tour was deleted successfully");
         }
         
         /// <summary>
@@ -72,10 +75,10 @@ namespace ToursSoft.Controllers
             {
                 foreach (var tour in tours)
                 {
+                    _logger.LogInformation("Try to update tour: {0}", tour.Id);
                     _context.Tours.Update(tour);
                 }
                 await _context.SaveChangesAsync();
-
             }
             catch (Exception e)
             {
@@ -83,6 +86,7 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
 
+            _logger.LogInformation("Tour was updated by user: {0}", User.Identity.Name);
             return Ok("Info was updated successfully");
         }
         
@@ -98,6 +102,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var tour in tours)
                 {
+                    _logger.LogInformation("Try to add new tour");
                     await _context.Tours.AddAsync(tour);
                 }
                 await _context.SaveChangesAsync();
@@ -107,6 +112,7 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("Tour was added by user: {0}", User.Identity.Name);
             return Ok("New tour was added successfully");
         }
 
@@ -126,6 +132,7 @@ namespace ToursSoft.Controllers
                     x.Id,
                 })
             );
+            _logger.LogInformation("User {0} get tours info", User.Identity.Name);
             return new ObjectResult(result);
         }
         

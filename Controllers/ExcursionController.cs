@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
@@ -222,7 +220,7 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
-            _logger.LogInformation("Excursions was add by user: {0}", User.Identity.Name);
+            _logger.LogInformation("Excursions was added by user: {0}", User.Identity.Name);
             return Ok("Excursion was added successfully");
         }
     }

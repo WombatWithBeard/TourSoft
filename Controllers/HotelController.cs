@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -26,6 +25,7 @@ namespace ToursSoft.Controllers
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="logger"></param>
         public HotelController(DataContext context, ILogger logger)
         {
             _logger = logger;
@@ -63,7 +63,7 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
 
-            _logger.LogInformation("Hotel was update by user: {0}", User.Identity.Name);
+            _logger.LogInformation("Hotel was updated by user: {0}", User.Identity.Name);
             return Ok("Info was updated successfully");
         }
         
@@ -89,7 +89,7 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
-            _logger.LogInformation("Hotel was add by user: {0}", User.Identity.Name);
+            _logger.LogInformation("Hotel was added by user: {0}", User.Identity.Name);
             return Ok("New hotel was added successfully");
         }
         
@@ -110,6 +110,7 @@ namespace ToursSoft.Controllers
                         x.Id,
                     })
                 );
+                _logger.LogInformation("User {0} get hotels info", User.Identity.Name);
                 return new ObjectResult(result);
             }
             catch (Exception e)
@@ -136,6 +137,7 @@ namespace ToursSoft.Controllers
                         var hotel = _context.Hotels.FirstOrDefault(x => x.Id == hotelId.Id);
                         if (hotel != null)
                         {
+                            _logger.LogInformation("Try to delete hotel: {0}", hotel.Id);
                             _context.Hotels.Remove(hotel);
                         }
                     }
@@ -143,6 +145,7 @@ namespace ToursSoft.Controllers
                 }
                 else
                 {
+                    _logger.LogWarning("Access denied for user: {0}", User.Identity.Name);
                     return Forbid("Access denied");
                 }
             }
@@ -151,6 +154,7 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("Hotel was deleted by user: {0}", User.Identity.Name);
             return Ok("User was deleted successfully");
         }
     }

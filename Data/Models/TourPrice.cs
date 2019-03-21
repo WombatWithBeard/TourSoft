@@ -5,9 +5,20 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Data.Models
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Tourprice class: this class about price of different tours of specific user 
+    /// </summary>
     [Table("TourPrice")]
     public class TourPrice: Model
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tourId"></param>
+        /// <param name="userId"></param>
+        /// <param name="price"></param>
         public TourPrice(Guid id, Guid tourId, Guid userId, double price) : base(id)
         {
             TourId = tourId;
@@ -15,6 +26,9 @@ namespace ToursSoft.Data.Models
             Price = price;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public TourPrice()
         {
         }
@@ -25,6 +39,9 @@ namespace ToursSoft.Data.Models
         [Required]
         [ForeignKey("Tour")]
         public Guid TourId { get; set; }
+        /// <summary>
+        /// link on tour table
+        /// </summary>
         public virtual Tour Tour { get; set; }
 
         /// <summary>
@@ -33,6 +50,9 @@ namespace ToursSoft.Data.Models
         [Required]
         [ForeignKey("User")]
         public Guid UserId { get; set; }
+        /// <summary>
+        /// link on user table
+        /// </summary>
         public virtual User User { get; set; }
 
         /// <summary>

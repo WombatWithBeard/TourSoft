@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Excursion class: excursion is the "Tour" in specific date and time
+    /// </summary>
     [Table("Excursion")]
     public class Excursion: Model
     {
@@ -46,9 +50,16 @@ namespace ToursSoft.Data.Models
         [Required]
         [ForeignKey("Tour")]
         public Guid TourId { get; set; }
+        /// <summary>
+        /// link on tour table
+        /// </summary>
         public virtual Tour Tour { get; set; }
 
         ////TODO: do it
+        /// <summary>
+        /// Check capacity of excursion
+        /// </summary>
+        /// <returns></returns>
         public bool GetCapacity()
         {
             return true;

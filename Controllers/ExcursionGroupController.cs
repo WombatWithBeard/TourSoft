@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ToursSoft.Data.Contexts;
@@ -27,6 +25,7 @@ namespace ToursSoft.Controllers
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="logger"></param>
         public ExcursionGroupController(DataContext context, ILogger logger)
         {
             _context = context;
@@ -39,7 +38,7 @@ namespace ToursSoft.Controllers
         /// <param name="excursion"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Get([FromBody] Excursion excursion)
+        public IActionResult Get([FromBody] Excursion excursion)
         {
             try
             {
@@ -103,8 +102,8 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
 
-            _logger.LogWarning("ExcursionGroup was update by user {0}", User.Identity.Name);
-            return Ok("Excursion group was deleted successfully");
+            _logger.LogWarning("ExcursionGroup was updated by user {0}", User.Identity.Name);
+            return Ok("Excursion group was updated successfully");
         }
 
         /// <summary>
@@ -138,7 +137,7 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
-            _logger.LogInformation("ExcursionGroup was add by user: {0}", User.Identity.Name);
+            _logger.LogInformation("ExcursionGroup was added by user: {0}", User.Identity.Name);
             return Ok("Excursion group was added to excursion successfully");
         }
         

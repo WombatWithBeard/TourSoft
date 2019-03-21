@@ -4,9 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Hotel class: all info about hotels. using with excursion group persons
+    /// </summary>
     [Table("Hotel")]
     public class Hotel: Model
     {
+        /// <inheritdoc />
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="address"></param>
+        /// <param name="phoneNumber"></param>
         public Hotel(Guid id, string name, string address, int phoneNumber) : base(id)
         {
             Name = name;
@@ -14,6 +26,9 @@ namespace ToursSoft.Data.Models
             PhoneNumber = phoneNumber;
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Hotel()
         {
         }

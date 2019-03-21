@@ -48,6 +48,7 @@ namespace ToursSoft.Controllers
                     var user = _context.Users.FirstOrDefault(x => x.Id == userid.Id);
                     if (user != null)
                     {
+                        _logger.LogInformation("Try to delete user: {0}", user.Id);
                         _context.Users.Remove(user);
                     }
                 }
@@ -58,6 +59,8 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            
+            _logger.LogInformation("User was deleted by user: {0}", User.Identity.Name);
             return Ok("User was deleted successfully");
         }
 
@@ -73,10 +76,10 @@ namespace ToursSoft.Controllers
             {
                 foreach (var user in users)
                 {
+                    _logger.LogInformation("Try to update user: {0}", user.Id);
                     _context.Users.Update(user);
                 }
                 await  _context.SaveChangesAsync();
-
             }
             catch (Exception e)
             {
@@ -84,6 +87,7 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
 
+            _logger.LogInformation("User was updated by user: {0}", User.Identity.Name);
             return Ok("Info was updated successfully");
         }
         
@@ -113,7 +117,7 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
-            _logger.LogWarning("New User was add by user: {0}", User.Identity.Name);
+            _logger.LogWarning("New User was added by user: {0}", User.Identity.Name);
             return Ok("User was added successfully");
         }
 
@@ -134,6 +138,7 @@ namespace ToursSoft.Controllers
                     x.Id,
                 })
             );
+            _logger.LogInformation("User {0} get users info", User.Identity.Name);
             return new ObjectResult(result);
         }
     }

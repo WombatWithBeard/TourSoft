@@ -5,11 +5,27 @@ using System.Security.Cryptography;
 
 namespace ToursSoft.Data.Models.Users
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// User class: info about soft user
+    /// </summary>
     [Table("User")]
     public class User: Model
     {
         private string _password;
 
+        
+        /// <inheritdoc />
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="company"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="login"></param>
+        /// <param name="password"></param>
+        /// <param name="role"></param>
         public User(Guid id, string name, string company, int phoneNumber, string login, string password, string role) 
             : base(id)
         {
@@ -21,6 +37,7 @@ namespace ToursSoft.Data.Models.Users
             Role = role;
         }
 
+        /// <inheritdoc />
         public User()
         {
         }

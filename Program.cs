@@ -4,8 +4,15 @@ using Microsoft.Extensions.Logging;
 
 namespace ToursSoft
 {
+    /// <summary>
+    /// Main class
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Program start
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
@@ -16,6 +23,11 @@ namespace ToursSoft
 //            ILogger logger = loggerFactory.CreateLogger<Program>();
         }
 
+        /// <summary>
+        /// Program host builder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>().ConfigureLogging(logging =>

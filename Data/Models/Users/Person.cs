@@ -5,10 +5,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models.Users
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Person class: info about group of people, who wants to get excursion
+    /// </summary>
     [Table("Person")]
     [Serializable]
     public class Person: Model
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="adultCount"></param>
+        /// <param name="childrenCount"></param>
+        /// <param name="babyCount"></param>
+        /// <param name="prepayment"></param>
+        /// <param name="leftToPay"></param>
+        /// <param name="photosession"></param>
+        /// <param name="comment"></param>
+        /// <param name="hotelId"></param>
+        /// <param name="hotelRoom"></param>
+        /// <param name="pickUpTime"></param>
         public Person(Guid id, int adultCount, int childrenCount, int babyCount, double prepayment, double leftToPay, 
             bool photosession, string comment, Guid hotelId, List<string> hotelRoom, DateTime pickUpTime) : base(id)
         {
@@ -24,6 +42,9 @@ namespace ToursSoft.Data.Models.Users
             PickUpTime = pickUpTime;
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Person()
         {
         }
@@ -69,6 +90,9 @@ namespace ToursSoft.Data.Models.Users
         [ForeignKey("Hotel")]
         [Required]
         public Guid HotelId { get; set; }
+        /// <summary>
+        /// link on hotel table
+        /// </summary>
         public virtual Hotel Hotel { get; set; }
 
         /// <summary>
