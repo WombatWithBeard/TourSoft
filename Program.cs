@@ -9,6 +9,11 @@ namespace ToursSoft
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+            
+//            ILoggerFactory loggerFactory = new LoggerFactory()
+//                .AddConsole()
+//                .AddDebug();
+//            ILogger logger = loggerFactory.CreateLogger<Program>();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
@@ -19,13 +20,15 @@ namespace ToursSoft.Controllers
     public class HotelController : Controller
     {
         private readonly DataContext _context;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
-        public HotelController(DataContext context)
+        public HotelController(DataContext context, ILogger logger)
         {
+            _logger = logger;
             _context = context;
         }
 
@@ -43,20 +46,24 @@ namespace ToursSoft.Controllers
                 {
                     foreach (var hotel in hotels)
                     {
+                        _logger.LogInformation("Try to update hotel: {0}", hotel.Id);
                         _context.Hotels.Update(hotel);  
                     }
                     await  _context.SaveChangesAsync();
                 }
                 else
                 {
+                    _logger.LogWarning("Access denied for user: {0}", User.Identity.Name);
                     return Forbid("Access denied");
                 }
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
 
+            _logger.LogInformation("Hotel was update by user: {0}", User.Identity.Name);
             return Ok("Info was updated successfully");
         }
         
@@ -72,15 +79,17 @@ namespace ToursSoft.Controllers
             {
                 foreach (var hotel in hotels)
                 {
-                    //TODO:
+                    _logger.LogInformation("Try to add new hotel");
                     _context.Hotels.Add(hotel);
                 }
                 await  _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("Hotel was add by user: {0}", User.Identity.Name);
             return Ok("New hotel was added successfully");
         }
         
@@ -105,6 +114,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
         }
@@ -138,6 +148,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
             return Ok("User was deleted successfully");

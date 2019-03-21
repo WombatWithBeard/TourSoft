@@ -55,6 +55,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
             return Ok("User was deleted successfully");
@@ -79,6 +80,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
 
@@ -101,14 +103,17 @@ namespace ToursSoft.Controllers
                     {
                         return StatusCode(418, "login already in use");
                     }
+                    _logger.LogWarning("Try to add new user");
                     await _context.Users.AddAsync(user);
                 }
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogWarning("New User was add by user: {0}", User.Identity.Name);
             return Ok("User was added successfully");
         }
 

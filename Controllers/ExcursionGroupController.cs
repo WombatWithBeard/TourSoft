@@ -5,6 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
 using ToursSoft.Data.Models.Users;
@@ -20,14 +21,16 @@ namespace ToursSoft.Controllers
     public class ExcursionGroupController : Controller
     {
         private readonly DataContext _context;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
-        public ExcursionGroupController(DataContext context)
+        public ExcursionGroupController(DataContext context, ILogger logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -62,10 +65,12 @@ namespace ToursSoft.Controllers
                             x.Id
                         });
                 }
+                _logger.LogInformation("User {0} get excursion groups info", User.Identity.Name);
                 return new ObjectResult(result);
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
         }
@@ -85,16 +90,20 @@ namespace ToursSoft.Controllers
                     var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupid.Id);
                     if (excursionGroup != null)
                     {
+                        _logger.LogWarning("Try to update excursion group {0}", excursionGroup.Id);
                         _context.ExcursionGroups.Update(excursionGroup);
                     }
                 }
+                
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
 
+            _logger.LogWarning("ExcursionGroup was update by user {0}", User.Identity.Name);
             return Ok("Excursion group was deleted successfully");
         }
 
@@ -113,17 +122,23 @@ namespace ToursSoft.Controllers
                 {
                     //TODO: check for capacity
                     _context.ExcursionGroups.Add(excursionGroup);
+                    
+                    _logger.LogInformation("Try to add new excursionGroup");
+                    
                     await  _context.SaveChangesAsync();
                 }
                 else
                 {
+                    _logger.LogError("Incorrect data for excursion groups from user: {0}", User.Identity.Name);
                     return BadRequest("Incorrect data");
                 }
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("ExcursionGroup was add by user: {0}", User.Identity.Name);
             return Ok("Excursion group was added to excursion successfully");
         }
         
@@ -142,6 +157,7 @@ namespace ToursSoft.Controllers
                     var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupId.Id);
                     if (excursionGroup != null)
                     {
+                        _logger.LogInformation("Try to delete excursionGroup: {0}", excursionGroup.Id);
                         _context.ExcursionGroups.Remove(excursionGroup);
                     }
                     await _context.SaveChangesAsync();
@@ -149,8 +165,10 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("ExcursionGroup was deleted by user: {0}", User.Identity.Name);
             return Ok("Excursion group was deleted successfully");
         }
     }

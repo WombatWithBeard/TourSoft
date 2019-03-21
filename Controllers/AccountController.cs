@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.AspNetCore.WebSockets.Internal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -35,20 +36,26 @@ namespace ToursSoft.Controllers
     public class AccountController : Controller
     {
         private readonly DataContext _context;
-        private readonly ILogger _logger;
+        private readonly ILogger  _logger;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="logger"></param>
         public AccountController(DataContext context, ILogger<AccountController> logger)
         {
             _context = context;
             _logger = logger;
         }
         
-        [HttpPost("token")]
-        public async Task Token([FromBody]LoginModel model)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("login")]
+        public async Task Login([FromBody]LoginModel model)
         {
             var identity = GetIdentity(model);
             if (identity == null)
@@ -73,7 +80,7 @@ namespace ToursSoft.Controllers
             var response = new
             {
                 access_token = encodedJwt,
-                username = identity.Name
+                login = identity.Name
             };
  
             // serializing response
@@ -91,7 +98,7 @@ namespace ToursSoft.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
                 };
                 ClaimsIdentity claimsIdentity =
@@ -104,11 +111,12 @@ namespace ToursSoft.Controllers
             return null;
         }
         
+        //TODO: check as unnecessary
         /// <summary>
         /// Logout user from server
         /// </summary>
         /// <returns>Redirect on Login view</returns>
-        [HttpGet("Logout")]
+        [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

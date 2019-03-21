@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
@@ -19,13 +20,15 @@ namespace ToursSoft.Controllers
     public class TourController : Controller
     {
         private readonly DataContext _context;
-        
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
-        public TourController(DataContext context)
+        public TourController(DataContext context, ILogger logger)
         {
+            _logger = logger;
             _context = context;
         }
 
@@ -51,6 +54,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
             return Ok("User was deleted successfully");
@@ -75,6 +79,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
 
@@ -99,6 +104,7 @@ namespace ToursSoft.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
             return Ok("New tour was added successfully");

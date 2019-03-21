@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCaching.Internal;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
@@ -20,14 +21,17 @@ namespace ToursSoft.Controllers
     public class ExcursionController : Controller
     {
         private readonly DataContext _context;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context"></param>
-        public ExcursionController(DataContext context)
+        /// <param name="logger"></param>
+        public ExcursionController(DataContext context, ILogger logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -47,20 +51,24 @@ namespace ToursSoft.Controllers
                         var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
                         if (excursion != null)
                         {
-                            _context.Excursions.Remove(excursion);  
+                            _logger.LogInformation("Try to delete excursion: {0}", excursion.Id);
+                            _context.Excursions.Remove(excursion);
                         }
                     }
                     await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    return BadRequest("Invalid user role");
+                    _logger.LogWarning("Access denied for user {0}", User.Identity.Name);
+                    return BadRequest("Access denied");
                 }
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("Excursions was deleted by user: {0}", User.Identity.Name);
             return Ok("Excursion was deleted successfully");
         }
 
@@ -77,6 +85,7 @@ namespace ToursSoft.Controllers
             {
                 if (User.IsInRole("admin"))
                 {
+                    
                     var status = _context.Excursions.FirstOrDefault(x => x.Id == excursion.Id);
                     if (status != null && status.Status)
                     {
@@ -86,17 +95,21 @@ namespace ToursSoft.Controllers
                     {
                         status.Status = true;
                     }
+                    
                     _context.SaveChanges();
                 }
                 else
                 {
+                    _logger.LogWarning("Access denied for user: {0}", User.Identity.Name);
                     return Forbid("Access denied");
                 }
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("Status for excursion: {0} was changed by user: {1}", excursion.Id, User.Identity.Name);
             return Ok("Excursion status was changed");
         }
 
@@ -134,10 +147,12 @@ namespace ToursSoft.Controllers
                             x.Id
                         }));
                 }
+                _logger.LogInformation("User: {0} get, excursions info", User.Identity.Name);
                 return new ObjectResult(result);
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
         }
@@ -156,20 +171,24 @@ namespace ToursSoft.Controllers
                 {
                     foreach (var excursion in excursions)
                     {
+                        _logger.LogInformation("Try to update excursion: {0}", excursion.Id);
                         _context.Excursions.Update(excursion);
                     }
-
                     await _context.SaveChangesAsync();  
                 }
                 else
                 {
+                    _logger.LogWarning("Access denied for user: {0}", User.Identity.Name);
                     return Forbid("Access denied");
                 }
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            
+            _logger.LogInformation("Excursions was update by user: {0}", User.Identity.Name);
             return Ok();
         }
 
@@ -187,19 +206,23 @@ namespace ToursSoft.Controllers
                 {
                     foreach (var excursion in excursions)
                     {
+                        _logger.LogInformation("Try to add new excursion");
                         await _context.Excursions.AddAsync(excursion);
                     }
                     await _context.SaveChangesAsync(); 
                 }
                 else
                 {
+                    _logger.LogWarning("Access denied for user: {0}", User.Identity.Name);
                     return Forbid("Access denied");
                 }
             }
             catch (Exception e)
             {
+                _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            _logger.LogInformation("Excursions was add by user: {0}", User.Identity.Name);
             return Ok("Excursion was added successfully");
         }
     }

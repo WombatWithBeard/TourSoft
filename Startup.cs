@@ -23,15 +23,12 @@ namespace ToursSoft
 {
     public class Startup
     {
-        private readonly ILogger _logger;
-        
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _logger = logger;
         }
-        
-        public IConfiguration Configuration { get; }
+
+        private IConfiguration Configuration { get; }
         
         public void ConfigureServices(IServiceCollection services)
         {
@@ -76,10 +73,7 @@ namespace ToursSoft
                 var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlpath = Path.Combine(AppContext.BaseDirectory, xmlfile);
                 x.IncludeXmlComments(xmlpath);
-            });
-            
-            _logger.LogInformation("Make configuring");
-            
+            });      
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -87,12 +81,10 @@ namespace ToursSoft
             
             if (env.IsDevelopment())
             {
-                _logger.LogInformation("In Development");
                 app.UseDeveloperExceptionPage();
             }
             
             app.UseAuthentication();
-            
             
             app.UseSwagger();
             app.UseSwaggerUI(x =>
