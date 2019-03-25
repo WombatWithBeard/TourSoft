@@ -16,7 +16,7 @@ namespace ToursSoft.Controllers
     /// Tour controller withs CRUD
     /// </summary>
     [Route("/[controller]")]
-    [Authorize(Roles = "admin")] //TODO:
+    [Authorize(Roles = "admin")]
     public class TourController : Controller
     {
         private readonly DataContext _context;
@@ -102,7 +102,10 @@ namespace ToursSoft.Controllers
             {
                 foreach (var tour in tours)
                 {
-                    //TODO: check for name
+                    if (_context.Tours.Any(x => x.Name == tour.Name))
+                    {
+                        return BadRequest("This tour name already exists");
+                    }
                     _logger.LogInformation("Try to add new tour");
                     await _context.Tours.AddAsync(tour);
                 }

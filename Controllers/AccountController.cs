@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -52,7 +53,7 @@ namespace ToursSoft.Controllers
             {
                 Response.StatusCode = 401;
                 await Response.WriteAsync("Invalid username or password.");
-                _logger.LogWarning("Invalid logging with login: " + model.Login);
+                _logger.LogWarning("Invalid logging with login: {0}", model.Login);
                 return;
             }
  
@@ -77,7 +78,7 @@ namespace ToursSoft.Controllers
             Response.ContentType = "application/json";
             await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
             
-            _logger.LogInformation("Success token granted");
+            _logger.LogInformation("Success token granted for user: {0}", model.Login);
         }
  
         private ClaimsIdentity GetIdentity(LoginModel model)
@@ -92,8 +93,8 @@ namespace ToursSoft.Controllers
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
                 };
                 
-                var claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                var claimsIdentity = new ClaimsIdentity(claims, "Token", 
+                    ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
                 return claimsIdentity;
             }
@@ -108,6 +109,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <returns>Redirect on Login view</returns>
         [HttpGet("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

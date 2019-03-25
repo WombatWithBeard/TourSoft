@@ -21,7 +21,7 @@ namespace ToursSoft.Auth
         /// <summary>
         /// hash key
         /// </summary>
-        private const string Key = "mysupersecret_secretkey!123";
+        private const string Key = "speci@l!3dominica987s0ft";
         
         /// <summary>
         /// lifespan token in minutes

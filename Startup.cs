@@ -64,7 +64,6 @@ namespace ToursSoft
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                         // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
-
                     };
                 });
             

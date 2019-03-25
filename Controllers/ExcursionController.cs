@@ -16,7 +16,7 @@ namespace ToursSoft.Controllers
     /// Excursion controller with CRUD
     /// </summary>
     [Route("/[controller]")]
-    [Authorize] //TODO:
+    [Authorize]
     public class ExcursionController : Controller
     {
         private readonly DataContext _context;
@@ -121,8 +121,8 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                object result;
-                
+                object result;               
+                //TODO:bad if
                 if (User.IsInRole("admin"))
                 {
                     result = JsonConvert.SerializeObject(_context.Excursions
@@ -132,6 +132,7 @@ namespace ToursSoft.Controllers
                             x.Status,
                             x.Tour.Name,
                             x.Tour.Capacity,
+                            currentcapacity = _context.GetExcursionGroupsCapacity(x.Id),
                             x.Id
                         }));
                 }
@@ -143,6 +144,7 @@ namespace ToursSoft.Controllers
                             x.DateTime,
                             x.Tour.Name,
                             x.Tour.Capacity,
+                            currentcapacity = _context.GetExcursionGroupsCapacity(x.Id),
                             x.Id
                         }));
                 }

@@ -68,7 +68,8 @@ namespace ToursSoft.Data.Models.Users
         /// <returns></returns>
         public int GetCapacity(DataContext context)
         {
-            var person = context.Persons.FirstOrDefault(p => p.Id == this.PersonId) ?? Person;
+            //TODO:CHECK again
+            var person = context.Persons.FirstOrDefault(p => p.Id == PersonId) ?? Person;
             return person.BabyCount + person.AdultCount + person.ChildrenCount;
         }
     }

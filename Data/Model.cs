@@ -14,7 +14,7 @@ namespace ToursSoft.Data
         /// Constructor
         /// </summary>
         /// <param name="id">Entity Id</param>
-        protected Model(Guid id) //TODO: check for warnings
+        protected Model(Guid id)
         {
             Id = id == Guid.Empty ? Guid.NewGuid() : id;
         }

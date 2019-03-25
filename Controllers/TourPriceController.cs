@@ -16,7 +16,7 @@ namespace ToursSoft.Controllers
     /// Tour price controller with CRUD
     /// </summary>
     [Route("/[controller]")]
-    [Authorize] //TODO:
+    [Authorize]
     public class TourPriceController : Controller
     {
         private readonly DataContext _context;

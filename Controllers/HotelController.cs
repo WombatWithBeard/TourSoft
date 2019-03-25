@@ -16,7 +16,7 @@ namespace ToursSoft.Controllers
     /// Hotel controller with CRUD
     /// </summary>
     [Route("/[controller]")]
-    [Authorize] //TODO:
+    [Authorize(Roles = "admin")]
     public class HotelController : Controller
     {
         private readonly DataContext _context;
@@ -80,7 +80,10 @@ namespace ToursSoft.Controllers
             {
                 foreach (var hotel in hotels)
                 {
-                    //TODO: check for name
+                    if (_context.Hotels.Any(x => x.Name == hotel.Name))
+                    {
+                        return BadRequest("This hotel name already exists");
+                    }
                     _logger.LogInformation("Try to add new hotel");
                     _context.Hotels.Add(hotel);
                 }

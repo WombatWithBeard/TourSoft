@@ -16,7 +16,7 @@ namespace ToursSoft.Controllers
     /// User controller with CRUD
     /// </summary>
     [Route("/[controller]")]
-    [Authorize(Roles = "admin")] //TODO: check authorize role
+    [Authorize(Roles = "admin")]
     public class UserController: Controller
     {
         private readonly DataContext _context;
