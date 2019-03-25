@@ -18,6 +18,7 @@ namespace ToursSoft.Auth
         /// </summary>
         public const string Audience = "TourSoftServer";
         
+        //TODO: dont forget to change it before publish
         /// <summary>
         /// hash key
         /// </summary>
