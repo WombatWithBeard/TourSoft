@@ -99,7 +99,7 @@ namespace ToursSoft
             app.UseSwagger();
             app.UseSwaggerUI(x =>
             {
-                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Tour API v1");
+                x.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Tour API v1");
             });
 
             app.UseMvc();

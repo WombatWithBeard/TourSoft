@@ -48,5 +48,8 @@ namespace ToursSoft.Data.Models
         /// Info about tour
         /// </summary>
         public string Description { get; set; }
+        
+//        public ICollection<Excursion> Excursions { get; set; }
+//        public ICollection<TourPrice> TourPrices { get; set; }
     }
 }

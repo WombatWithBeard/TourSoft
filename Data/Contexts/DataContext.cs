@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 using ToursSoft.Data.Models;
 using ToursSoft.Data.Models.Users;
@@ -66,14 +68,16 @@ namespace ToursSoft.Data.Contexts
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<Tour>().ToTable("Tour");
-            modelBuilder.Entity<Hotel>().ToTable("Hotel");
-            modelBuilder.Entity<TourPrice>().ToTable("TourPrice");
-            modelBuilder.Entity<ExcursionGroup>().ToTable("ExcursionGroup");
-            modelBuilder.Entity<Excursion>().ToTable("Excursion");
-            modelBuilder.Entity<Person>().ToTable("Person");
-            modelBuilder.Entity<Tour>().ToTable("Tour");
+////            modelBuilder.Entity<User>().ToTable("User");
+////            modelBuilder.Entity<Tour>().ToTable("Tour");
+////            modelBuilder.Entity<Hotel>().ToTable("Hotel");
+//            modelBuilder.Entity<TourPrice>().HasOne(t => t.Tour).WithMany(tp => tp.TourPrices);
+//            modelBuilder.Entity<TourPrice>().HasOne(u => u.User).WithMany(tp => tp.TourPrices);
+//            modelBuilder.Entity<ExcursionGroup>().HasOne(e => e.Excursion).WithMany(eg => eg.ExcursionGroups); //.ToTable("ExcursionGroup");
+//            modelBuilder.Entity<ExcursionGroup>().HasOne(u => u.User).WithMany(eg => eg.ExcursionGroups);
+//            modelBuilder.Entity<Excursion>().HasOne(t => t.Tour).WithMany(e => e.Excursions);
+//            modelBuilder.Entity<Person>().HasOne(h => h.Hotel).WithMany(p => p.Persons);
+////            modelBuilder.Entity<Tour>().ToTable("Tour");
 
             modelBuilder.Entity<User>().HasData(
                 new User(Guid.NewGuid(), 
@@ -84,5 +88,23 @@ namespace ToursSoft.Data.Contexts
                     "admin", 
                     "admin"));
         }
-    }
+
+        /// <summary>
+        /// GetExcursionGroupsCapacity
+        /// </summary>
+        /// <param name="excursionId"></param>
+        /// <returns></returns>
+        public int GetExcursionGroupsCapacity(Guid excursionId)
+        {
+            var sum = 0;
+            
+            foreach (var eg in ExcursionGroups.Where(eg => eg.ExcursionId == excursionId))
+            {
+                //TODO: do it beautiful
+                sum += eg.GetCapacity(this);
+            }
+
+            return sum;
+        }
+     }
  }

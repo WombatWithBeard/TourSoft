@@ -22,7 +22,7 @@ namespace ToursSoft.Controllers
     /// <summary>
     /// Account controller, with login, authorisation and logout functions
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     public class AccountController : Controller
     {
         private readonly DataContext _context;
@@ -59,8 +59,8 @@ namespace ToursSoft.Controllers
             var now = DateTime.UtcNow;
             // creating JWT-token
             var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.Issuer,
-                    audience: AuthOptions.Audience,
+                    AuthOptions.Issuer,
+                    AuthOptions.Audience,
                     notBefore: now,
                     claims: identity.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(AuthOptions.Lifetime)),
@@ -91,7 +91,8 @@ namespace ToursSoft.Controllers
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
                 };
-                ClaimsIdentity claimsIdentity =
+                
+                var claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
                 return claimsIdentity;

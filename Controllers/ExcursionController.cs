@@ -15,7 +15,7 @@ namespace ToursSoft.Controllers
     /// <summary>
     /// Excursion controller with CRUD
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [Authorize] //TODO:
     public class ExcursionController : Controller
     {
@@ -186,6 +186,8 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
+            
+            //TODO:
             
             _logger.LogInformation("Excursions was update by user: {0}", User.Identity.Name);
             return Ok();

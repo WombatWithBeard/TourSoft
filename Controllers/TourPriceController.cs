@@ -15,7 +15,7 @@ namespace ToursSoft.Controllers
     /// <summary>
     /// Tour price controller with CRUD
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [Authorize] //TODO:
     public class TourPriceController : Controller
     {

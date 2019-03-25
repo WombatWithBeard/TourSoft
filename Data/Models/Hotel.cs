@@ -48,5 +48,7 @@ namespace ToursSoft.Data.Models
         /// Info about phone number of the hotel
         /// </summary>
         public long PhoneNumber { get; set; }
+        
+//        public ICollection<Person> Persons { get; set; }
     }
 }

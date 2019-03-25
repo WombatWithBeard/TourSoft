@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models.Users;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace ToursSoft.Controllers
@@ -15,7 +15,7 @@ namespace ToursSoft.Controllers
     /// <summary>
     /// User controller with CRUD
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [Authorize(Roles = "admin")] //TODO: check authorize role
     public class UserController: Controller
     {

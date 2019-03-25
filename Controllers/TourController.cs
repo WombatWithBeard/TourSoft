@@ -15,7 +15,7 @@ namespace ToursSoft.Controllers
     /// <summary>
     /// Tour controller withs CRUD
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [Authorize(Roles = "admin")] //TODO:
     public class TourController : Controller
     {
@@ -102,6 +102,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var tour in tours)
                 {
+                    //TODO: check for name
                     _logger.LogInformation("Try to add new tour");
                     await _context.Tours.AddAsync(tour);
                 }

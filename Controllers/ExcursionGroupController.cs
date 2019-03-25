@@ -15,7 +15,7 @@ namespace ToursSoft.Controllers
     /// <summary>
     /// Excursion group controller with CRUD
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [Authorize] //TODO:
     public class ExcursionGroupController : Controller
     {
@@ -90,6 +90,7 @@ namespace ToursSoft.Controllers
                     var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupid.Id);
                     if (excursionGroup != null)
                     {
+                        //TODO: check capacity
                         _logger.LogWarning("Try to update excursion group {0}", excursionGroup.Id);
                         _context.ExcursionGroups.Update(excursionGroup);
                     }
@@ -120,16 +121,20 @@ namespace ToursSoft.Controllers
                 var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionGroup.ExcursionId);
                 if (excursion != null && excursion.Status)
                 {
-                    var sum = 0;
-                    foreach (var eg in _context.ExcursionGroups.Where(eg => eg.ExcursionId == excursionGroup.ExcursionId))
-                    {
-                        sum += eg.GetCapacity();
-                    }
+//                    var sum = 0;
+
+                    var currentCapacity = _context.GetExcursionGroupsCapacity(excursionGroup.ExcursionId);
+                    
+//                    foreach (var eg in _context.ExcursionGroups.Where(eg => eg.ExcursionId == excursionGroup.ExcursionId))
+//                    {
+//                        //TODO: do it beautiful
+//                        sum += eg.GetCapacity(_context);
+//                    }
 
                     //TODO: Dont work this shit
-                    var b = excursion.Tour.Capacity;
-                    
-                    if (excursion.Tour.Capacity <= (sum + excursionGroup.GetCapacity()))
+                    var a = _context.Tours.FirstOrDefault(x => x.Id == excursion.TourId);
+                   
+                    if (a != null && a.Capacity >= (currentCapacity + excursionGroup.GetCapacity(_context)))
                     {
                         _context.ExcursionGroups.Add(excursionGroup);
                     
@@ -139,8 +144,8 @@ namespace ToursSoft.Controllers
                     }
                     else
                     {
-                        _logger.LogWarning("Not enough excursion space. Current workload {0} / {1}", 
-                            excursion.Tour.Capacity, sum);
+                        _logger.LogWarning("Not enough excursion space. Current workload is: {0} / {1}", 
+                            currentCapacity, excursion.Tour.Capacity);
                         return BadRequest("Not enough excursion space");
                     }
                 }

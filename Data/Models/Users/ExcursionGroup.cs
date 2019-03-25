@@ -64,10 +64,12 @@ namespace ToursSoft.Data.Models.Users
         /// <summary>
         /// Check capacity of excursion
         /// </summary>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public int GetCapacity()
+        public int GetCapacity(DataContext context)
         {
-            return Person.BabyCount + Person.AdultCount + Person.ChildrenCount;
+            var person = context.Persons.FirstOrDefault(p => p.Id == this.PersonId) ?? Person;
+            return person.BabyCount + person.AdultCount + person.ChildrenCount;
         }
     }
 }

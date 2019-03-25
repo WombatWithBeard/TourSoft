@@ -80,5 +80,8 @@ namespace ToursSoft.Data.Models.Users
         /// </summary>
         [Required]
         public string Role { get; set; }
+        
+//        public ICollection<ExcursionGroup> ExcursionGroups { get; set; }
+//        public ICollection<TourPrice> TourPrices { get; set; }
     }
 }

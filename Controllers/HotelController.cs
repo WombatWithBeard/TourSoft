@@ -15,7 +15,7 @@ namespace ToursSoft.Controllers
     /// <summary>
     /// Hotel controller with CRUD
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [Authorize] //TODO:
     public class HotelController : Controller
     {
@@ -80,6 +80,7 @@ namespace ToursSoft.Controllers
             {
                 foreach (var hotel in hotels)
                 {
+                    //TODO: check for name
                     _logger.LogInformation("Try to add new hotel");
                     _context.Hotels.Add(hotel);
                 }
