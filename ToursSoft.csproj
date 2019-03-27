@@ -21,7 +21,7 @@
       <Version>2.1.8</Version>
     </PackageReference>
     <PackageReference Include="Npgsql">
-      <Version>4.0.4</Version>
+      <Version>4.0.5</Version>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL">
       <Version>2.1.2</Version>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
@@ -26,7 +27,7 @@ namespace ToursSoft.Data.Models.Users
         /// <param name="login"></param>
         /// <param name="password"></param>
         /// <param name="role"></param>
-        public User(Guid id, string name, string company, int phoneNumber, string login, string password, string role) 
+        public User(Guid id, string name, string company, int phoneNumber, string login, string password) 
             : base(id)
         {
             Name = name;
@@ -34,7 +35,6 @@ namespace ToursSoft.Data.Models.Users
             PhoneNumber = phoneNumber;
             Login = login;
             Password = password;
-            Role = role;
         }
 
         /// <inheritdoc />
@@ -78,10 +78,13 @@ namespace ToursSoft.Data.Models.Users
         /// <summary>
         /// attribute: manager, admin, user
         /// </summary>
-        [Required]
-        public string Role { get; set; }
+//        [Required]
+//        [ForeignKey("Role")]
+//        public ICollection<Guid> RoleId { get; } = new List<Guid>();
         
-//        public ICollection<ExcursionGroup> ExcursionGroups { get; set; }
-//        public ICollection<TourPrice> TourPrices { get; set; }
+        /// <summary>
+        /// link to role table
+        /// </summary>
+        public IList<UserRole> UserRoles { get; set; }
     }
 }

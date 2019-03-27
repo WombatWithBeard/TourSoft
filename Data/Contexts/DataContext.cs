@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using ToursSoft.Data.Models;
 using ToursSoft.Data.Models.Users;
 
@@ -45,7 +47,18 @@ namespace ToursSoft.Data.Contexts
         /// Persons db connector
         /// </summary>
         public DbSet<Person> Persons { get; set; }
+        
+        /// <summary>
+        /// Roles db connector
+        /// </summary>
+        public DbSet<Role> Roles { get; set; }
 
+        /// <summary>
+        /// Roles db connector
+        /// </summary>
+        public DbSet<UserRole> UserRoles { get; set; }
+
+        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>
@@ -54,13 +67,15 @@ namespace ToursSoft.Data.Contexts
         {
         }
          
+        /// <inheritdoc />
         /// <summary>
         /// Default constructor
         /// </summary>
         public DataContext()
-         { 
-         }
+        {
+        }
 
+        /// <inheritdoc />
         /// <summary>
         /// Default on model creating, make tabels and seed admin role
         /// </summary>
@@ -78,15 +93,55 @@ namespace ToursSoft.Data.Contexts
 //            modelBuilder.Entity<Person>().HasOne(h => h.Hotel).WithMany(p => p.Persons);
 ////            modelBuilder.Entity<Tour>().ToTable("Tour");
 
+            modelBuilder.Entity<UserRole>().HasKey(ur => new {ur.UserId, ur.RoleId});
+            
+            modelBuilder.Entity<UserRole>()
+                .HasOne<User>(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
+            
+            modelBuilder.Entity<UserRole>()
+                .HasOne<Role>(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
+            
+            var roleId = Guid.NewGuid();
+            seedRole(modelBuilder, roleId);
+
+            var userId = Guid.NewGuid();
+            seedUser(modelBuilder, userId);
+
+            seedUserRole(modelBuilder,roleId, userId);
+            
+            base.OnModelCreating(modelBuilder);
+        }
+
+        private void seedUserRole(ModelBuilder modelBuilder, Guid roleId, Guid userId)
+        {
+            modelBuilder.Entity<UserRole>().HasData(
+                new UserRole(id: Guid.NewGuid(), 
+                    roleId: roleId, 
+                    userId: userId
+                ));
+        }
+
+        private void seedUser(ModelBuilder modelBuilder, Guid userId)
+        {
             modelBuilder.Entity<User>().HasData(
-                new User(Guid.NewGuid(), 
+                new User(userId, 
                     "admin", 
                     "admin", 
                     123, 
                     "admin", 
-                    "admin", 
-                    "admin"));
+                    "admin"
+                ));
         }
+
+        private void seedRole(ModelBuilder modelBuilder, Guid roleId)
+        {
+            modelBuilder.Entity<Role>().HasData(new Role(roleId, "admin", "main role"));
+        }
+
 
         /// <summary>
         /// GetExcursionGroupsCapacity

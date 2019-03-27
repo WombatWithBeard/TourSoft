@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models.Users;
-using Microsoft.Extensions.Logging;
 
 namespace ToursSoft.Controllers
 {
@@ -17,7 +17,7 @@ namespace ToursSoft.Controllers
     /// </summary>
     [Route("/[controller]")]
     [Authorize(Roles = "admin")]
-    public class UserController: Controller
+    public class RoleController: Controller
     {
         private readonly DataContext _context;
         private readonly ILogger _logger;
@@ -27,7 +27,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="logger"></param>
-        public UserController(DataContext context, ILogger<UserController> logger)
+        public RoleController(DataContext context, ILogger<RoleController> logger)
         {
             _context = context;
             _logger = logger;

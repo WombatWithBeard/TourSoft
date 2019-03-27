@@ -21,6 +21,7 @@ namespace ToursSoft.Data
 
         internal Model(){}
 
+        /// <inheritdoc />
         /// <summary>
         /// Entity Id
         /// </summary>

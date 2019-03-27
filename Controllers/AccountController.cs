@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -85,22 +87,20 @@ namespace ToursSoft.Controllers
         {
             var pass = Convert.ToBase64String(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(model.Password)));
             var user = _context.Users.FirstOrDefault(u => u.Login == model.Login && u.Password == pass);
-            if (user != null)
+            if (user == null) return null; // if we cant find user
+            
+            var claims = new List<Claim> {new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)};
+            //TODO: Check this
+            foreach (var userRole in _context.UserRoles.Include(ur => ur.Role)
+                .Where(ur => ur.UserId == user.Id))
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
-                };
-                
-                var claimsIdentity = new ClaimsIdentity(claims, "Token", 
-                    ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, userRole.Role.Name));
             }
- 
-            // if we cant find user
-            return null;
+                    
+            var claimsIdentity = new ClaimsIdentity(claims, "Token", 
+                ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+            return claimsIdentity;
         }
         
         //TODO: check as unnecessary
