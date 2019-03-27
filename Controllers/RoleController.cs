@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -36,20 +37,20 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete user by id
         /// </summary>
-        /// <param name="usersId"></param>
+        /// <param name="rolesid"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] List<User> usersId)
+        public async Task<IActionResult> Delete([FromBody] List<Role> rolesid)
         {
             try
             {
-                foreach (var userid in usersId)
+                foreach (var roleid in rolesid)
                 {
-                    var user = _context.Users.FirstOrDefault(x => x.Id == userid.Id);
-                    if (user != null)
+                    var role = _context.Roles.FirstOrDefault(x => x.Id == roleid.Id);
+                    if (role != null)
                     {
-                        _logger.LogInformation("Try to delete user: {0}", user.Id);
-                        _context.Users.Remove(user);
+                        _logger.LogInformation("Try to delete role: {0}", role.Id);
+                        _context.Roles.Remove(role);
                     }
                 }
                 await _context.SaveChangesAsync();
@@ -60,24 +61,24 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
             
-            _logger.LogInformation("User was deleted by user: {0}", User.Identity.Name);
-            return Ok("User was deleted successfully");
+            _logger.LogInformation("Role was deleted by user: {0}", User.Identity.Name);
+            return Ok("Role was deleted successfully");
         }
 
         /// <summary>
         /// Update user info
         /// </summary>
-        /// <param name="users"></param>
+        /// <param name="roles"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<User> users)
+        public async Task<IActionResult> Update([FromBody] List<Role> roles)
         {
             try
             {
-                foreach (var user in users)
+                foreach (var role in roles)
                 {
-                    _logger.LogInformation("Try to update user: {0}", user.Id);
-                    _context.Users.Update(user);
+                    _logger.LogInformation("Try to update role: {0}", role.Id);
+                    _context.Roles.Update(role);
                 }
                 await  _context.SaveChangesAsync();
             }
@@ -87,28 +88,28 @@ namespace ToursSoft.Controllers
                 return BadRequest(e.ToString());
             }
 
-            _logger.LogInformation("User was updated by user: {0}", User.Identity.Name);
+            _logger.LogInformation("Role was updated by user: {0}", User.Identity.Name);
             return Ok("Info was updated successfully");
         }
-        
+
         /// <summary>
         /// Create new user
         /// </summary>
-        /// <param name="users"></param>
+        /// <param name="roles"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<User> users)
+        public async Task<IActionResult> Add([FromBody] List<Role> roles)
         {
             try
             {
-                foreach (var user in users)
+                foreach (var role in roles)
                 {
-                    if (_context.Users.FirstOrDefault(x => x.Login == user.Login) != null)
+                    if (_context.Roles.FirstOrDefault(x => x.Name == role.Name) != null)
                     {
-                        return StatusCode(418, "login already in use");
+                        return StatusCode(418, "Role name already in use");
                     }
-                    _logger.LogWarning("Try to add new user");
-                    await _context.Users.AddAsync(user);
+                    _logger.LogWarning("Try to add new role");
+                    await _context.Roles.AddAsync(role);
                 }
                 await _context.SaveChangesAsync();
             }
@@ -117,8 +118,8 @@ namespace ToursSoft.Controllers
                 _logger.LogError(e.ToString());
                 return BadRequest(e.ToString());
             }
-            _logger.LogWarning("New User was added by user: {0}", User.Identity.Name);
-            return Ok("User was added successfully");
+            _logger.LogWarning("New role was added by user: {0}", User.Identity.Name);
+            return Ok("Role was added successfully");
         }
 
         /// <summary>
@@ -129,18 +130,15 @@ namespace ToursSoft.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            _logger.LogInformation("User {username} getting info about users", User.Identity.Name);
-            var result = JsonConvert.SerializeObject(_context.Users.Select(x => new
+            _logger.LogInformation("User {0} getting info about roles", User.Identity.Name);
+            var result = JsonConvert.SerializeObject(_context.Roles.Select(x => new
                 {
                     x.Name,
-                    x.Company,
-                    x.PhoneNumber,
-                    x.Login,
-                    //x.Role,
-                    x.Id,
+                    x.Description,
+                    x.Id
                 })
             );
-            _logger.LogInformation("User {0} get users info", User.Identity.Name);
+            _logger.LogInformation("User {0} get role info", User.Identity.Name);
             return new ObjectResult(result);
         }
     }

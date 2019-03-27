@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models.Users;
@@ -128,15 +129,16 @@ namespace ToursSoft.Controllers
         //TODO: Check for admin and return more info? 
         [HttpGet]
         public IActionResult Get()
-        {
-            _logger.LogInformation("User {username} getting info about users", User.Identity.Name);
-            var result = JsonConvert.SerializeObject(_context.Users.Select(x => new
+        {           
+            _logger.LogInformation("User {username} getting info about users", User.Identity.Name);           
+            var result = JsonConvert.SerializeObject(_context.Users
+                .Select(x => new
                 {
                     x.Name,
                     x.Company,
                     x.PhoneNumber,
                     x.Login,
-                    //x.Role,
+                    RoleName = x.UserRoles.Select(ur => ur.Role.Name),
                     x.Id,
                 })
             );
