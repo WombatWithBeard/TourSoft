@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -14,10 +15,12 @@ namespace ToursSoft.Data.Models.Users
         }
 
         [ForeignKey("Role")]
+        [Required]
         public Guid RoleId { get; set; }
         public virtual Role Role { get; set; }
 
         [ForeignKey("User")]
+        [Required]
         public Guid UserId { get; set; }
         public virtual User User { get; set; }
     }

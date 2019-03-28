@@ -74,13 +74,6 @@ namespace ToursSoft.Data.Models.Users
             get => _password;
             set => _password = Convert.ToBase64String(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(value)));
         }
-
-        /// <summary>
-        /// attribute: manager, admin, user
-        /// </summary>
-//        [Required]
-//        [ForeignKey("Role")]
-//        public ICollection<Guid> RoleId { get; } = new List<Guid>();
         
         /// <summary>
         /// link to role table

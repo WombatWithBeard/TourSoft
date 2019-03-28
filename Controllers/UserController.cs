@@ -126,7 +126,6 @@ namespace ToursSoft.Controllers
         /// Get info about users
         /// </summary>
         /// <returns></returns>
-        //TODO: Check for admin and return more info? 
         [HttpGet]
         public IActionResult Get()
         {           

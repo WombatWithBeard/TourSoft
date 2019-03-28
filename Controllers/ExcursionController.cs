@@ -43,24 +43,16 @@ namespace ToursSoft.Controllers
         {
             try
             {
-                if (User.IsInRole("admin"))
+                foreach (var excursionid in excursionsId)
                 {
-                    foreach (var excursionid in excursionsId)
+                    var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
+                    if (excursion != null)
                     {
-                        var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
-                        if (excursion != null)
-                        {
-                            _logger.LogInformation("Try to delete excursion: {0}", excursion.Id);
-                            _context.Excursions.Remove(excursion);
-                        }
+                        _logger.LogInformation("Try to delete excursion: {0}", excursion.Id);
+                        _context.Excursions.Remove(excursion);
                     }
-                    await _context.SaveChangesAsync();
                 }
-                else
-                {
-                    _logger.LogWarning("Access denied for user {0}", User.Identity.Name);
-                    return BadRequest("Access denied");
-                }
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
