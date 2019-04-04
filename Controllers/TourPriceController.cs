@@ -75,18 +75,15 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update user info
         /// </summary>
-        /// <param name="tourPrices"></param>
+        /// <param name="tourPrice"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<TourPrice> tourPrices)
+        public async Task<IActionResult> Update([FromBody] TourPrice tourPrice)
         {
             try
             {
-                foreach (var tourPrice in tourPrices)
-                {
-                    _logger.LogInformation("Try to update tourPrice: {0}", tourPrice.Id);
-                    _context.TourPrices.Update(tourPrice);
-                }
+                _logger.LogInformation("Try to update tourPrice: {0}", tourPrice.Id);
+                _context.TourPrices.Update(tourPrice);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -102,18 +99,16 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Create new user
         /// </summary>
-        /// <param name="tourPrices"></param>
+        /// <param name="tourPrice"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<TourPrice> tourPrices)
+        public async Task<IActionResult> Add([FromBody] TourPrice tourPrice)
         {
             try
             {
-                foreach (var tourPrice in tourPrices)
-                {
-                    _logger.LogInformation("Try to add new tourPrice");
-                    await _context.TourPrices.AddAsync(tourPrice);
-                }
+
+                _logger.LogInformation("Try to add new tourPrice");
+                await _context.TourPrices.AddAsync(tourPrice);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)

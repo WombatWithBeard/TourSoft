@@ -66,18 +66,15 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update info about tours
         /// </summary>
-        /// <param name="tours"></param>
+        /// <param name="tour"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<Tour> tours)
+        public async Task<IActionResult> Update([FromBody] Tour tour)
         {
             try
             {
-                foreach (var tour in tours)
-                {
-                    _logger.LogInformation("Try to update tour: {0}", tour.Id);
-                    _context.Tours.Update(tour);
-                }
+                _logger.LogInformation("Try to update tour: {0}", tour.Id);
+                _context.Tours.Update(tour);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -93,22 +90,19 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Create new tours
         /// </summary>
-        /// <param name="tours"></param>
+        /// <param name="tour"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<Tour> tours)
+        public async Task<IActionResult> Add([FromBody] Tour tour)
         {
             try
             {
-                foreach (var tour in tours)
+                if (_context.Tours.Any(x => x.Name == tour.Name))
                 {
-                    if (_context.Tours.Any(x => x.Name == tour.Name))
-                    {
-                        return BadRequest("This tour name already exists");
-                    }
-                    _logger.LogInformation("Try to add new tour");
-                    await _context.Tours.AddAsync(tour);
+                    return BadRequest("This tour name already exists");
                 }
+                _logger.LogInformation("Try to add new tour");
+                await _context.Tours.AddAsync(tour);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)

@@ -78,38 +78,35 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update excursion groups info
         /// </summary>
-        /// <param name="excursionGroupsid"></param>
+        /// <param name="excursionGroupid"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<ExcursionGroup> excursionGroupsid)
+        public async Task<IActionResult> Update([FromBody] ExcursionGroup excursionGroupid)
         {
             try
             {
-                foreach (var excursionGroupid in excursionGroupsid)
+                var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupid.Id);
+                if (excursionGroup != null)
                 {
-                    var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupid.Id);
-                    if (excursionGroup != null)
+                    var currentCapacity = _context.GetExcursionGroupsCapacity(excursionGroup.ExcursionId);
+                    //TODO: this shit dont work- excursion.Tour.Capacity
+                    var a = _context.Tours.FirstOrDefault(x => x.Id == _context.Excursions.FirstOrDefault(e => e.Id == excursionGroup.ExcursionId).Id);
+                    if (a != null && a.Capacity >= (currentCapacity + excursionGroup.GetCapacity(_context)))
                     {
-                        var currentCapacity = _context.GetExcursionGroupsCapacity(excursionGroup.ExcursionId);
-                        //TODO: this shit dont work- excursion.Tour.Capacity
-                        var a = _context.Tours.FirstOrDefault(x => x.Id == _context.Excursions.FirstOrDefault(e => e.Id == excursionGroup.ExcursionId).Id);
-                        if (a != null && a.Capacity >= (currentCapacity + excursionGroup.GetCapacity(_context)))
-                        {
-                            _context.ExcursionGroups.Update(excursionGroup);
-                            _logger.LogInformation("Try to update excursionGroup");
-                    
-                            await  _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            _logger.LogWarning("Not enough excursion space. Current workload is: {0} / {1}", 
-                                currentCapacity, a.Capacity);
-                            return BadRequest("Not enough excursion space");
-                        }
-                        
-                        _logger.LogWarning("Try to update excursion group {0}", excursionGroup.Id);
                         _context.ExcursionGroups.Update(excursionGroup);
+                        _logger.LogInformation("Try to update excursionGroup");
+                
+                        await  _context.SaveChangesAsync();
                     }
+                    else
+                    {
+                        _logger.LogWarning("Not enough excursion space. Current workload is: {0} / {1}", 
+                            currentCapacity, a.Capacity);
+                        return BadRequest("Not enough excursion space");
+                    }
+                    
+                    _logger.LogWarning("Try to update excursion group {0}", excursionGroup.Id);
+                    _context.ExcursionGroups.Update(excursionGroup);
                 }
                 
                 await _context.SaveChangesAsync();

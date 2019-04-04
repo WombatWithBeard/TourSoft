@@ -68,18 +68,15 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update UserRole info
         /// </summary>
-        /// <param name="userRoles"></param>
+        /// <param name="userRole"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<UserRole> userRoles)
+        public async Task<IActionResult> Update([FromBody] UserRole userRole)
         {
             try
             {
-                foreach (var userRole in userRoles)
-                {
-                    _logger.LogInformation("Try to update role: {0}", userRole.Id);
-                    _context.UserRoles.Update(userRole);
-                }
+                _logger.LogInformation("Try to update role: {0}", userRole.Id);
+                _context.UserRoles.Update(userRole);
                 await  _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -95,22 +92,20 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Create new UserRole
         /// </summary>
-        /// <param name="userRoles"></param>
+        /// <param name="userRole"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<UserRole> userRoles)
+        public async Task<IActionResult> Add([FromBody] UserRole userRole)
         {
             try
             {
-                foreach (var userRole in userRoles)
+
+                if (_context.UserRoles.FirstOrDefault(x => x.RoleId == userRole.RoleId && x.UserId == userRole.UserId) != null)
                 {
-                    if (_context.UserRoles.FirstOrDefault(x => x.RoleId == userRole.RoleId && x.UserId == userRole.UserId) != null)
-                    {
-                        return BadRequest("User already have this role");
-                    }
-                    _logger.LogWarning("Try to add new role");
-                    await _context.UserRoles.AddAsync(userRole);
+                    return BadRequest("User already have this role");
                 }
+                _logger.LogWarning("Try to add new role");
+                await _context.UserRoles.AddAsync(userRole);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)

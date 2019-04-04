@@ -36,20 +36,17 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update info about hotel
         /// </summary>
-        /// <param name="hotels"></param>
+        /// <param name="hotel"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<Hotel> hotels)
+        public async Task<IActionResult> Update([FromBody] Hotel hotel)
         {
             try
             {
                 if (User.IsInRole("admin"))
                 {
-                    foreach (var hotel in hotels)
-                    {
-                        _logger.LogInformation("Try to update hotel: {0}", hotel.Id);
-                        _context.Hotels.Update(hotel);  
-                    }
+                    _logger.LogInformation("Try to update hotel: {0}", hotel.Id);
+                    _context.Hotels.Update(hotel);  
                     await  _context.SaveChangesAsync();
                 }
                 else
@@ -71,22 +68,19 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Add new hotels
         /// </summary>
-        /// <param name="hotels"></param>
+        /// <param name="hotel"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<Hotel> hotels)
+        public async Task<IActionResult> Add([FromBody] Hotel hotel)
         {
             try
             {
-                foreach (var hotel in hotels)
+                if (_context.Hotels.Any(x => x.Name == hotel.Name))
                 {
-                    if (_context.Hotels.Any(x => x.Name == hotel.Name))
-                    {
-                        return BadRequest("This hotel name already exists");
-                    }
-                    _logger.LogInformation("Try to add new hotel");
-                    _context.Hotels.Add(hotel);
+                    return BadRequest("This hotel name already exists");
                 }
+                _logger.LogInformation("Try to add new hotel");
+                _context.Hotels.Add(hotel);
                 await  _context.SaveChangesAsync();
             }
             catch (Exception e)

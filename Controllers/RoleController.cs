@@ -68,18 +68,15 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update role info
         /// </summary>
-        /// <param name="roles"></param>
+        /// <param name="role"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] List<Role> roles)
+        public async Task<IActionResult> Update([FromBody] Role role)
         {
             try
             {
-                foreach (var role in roles)
-                {
-                    _logger.LogInformation("Try to update role: {0}", role.Id);
-                    _context.Roles.Update(role);
-                }
+                _logger.LogInformation("Try to update role: {0}", role.Id);
+                _context.Roles.Update(role);
                 await  _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -95,22 +92,19 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Create new role
         /// </summary>
-        /// <param name="roles"></param>
+        /// <param name="role"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<Role> roles)
+        public async Task<IActionResult> Add([FromBody] Role role)
         {
             try
             {
-                foreach (var role in roles)
+                if (_context.Roles.FirstOrDefault(x => x.Name == role.Name) != null)
                 {
-                    if (_context.Roles.FirstOrDefault(x => x.Name == role.Name) != null)
-                    {
-                        return StatusCode(418, "Role name already in use");
-                    }
-                    _logger.LogWarning("Try to add new role");
-                    await _context.Roles.AddAsync(role);
+                    return StatusCode(418, "Role name already in use");
                 }
+                _logger.LogWarning("Try to add new role");
+                await _context.Roles.AddAsync(role);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)

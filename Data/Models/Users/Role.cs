@@ -20,7 +20,7 @@ namespace ToursSoft.Data.Models.Users
         {
             Name = name;
             Description = description;
-            UserRoles = new List<UserRole>();
+            //UserRoles = new List<UserRole>();
         }
 
         /// <inheritdoc />

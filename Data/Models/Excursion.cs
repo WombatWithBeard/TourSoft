@@ -20,11 +20,13 @@ namespace ToursSoft.Data.Models
         /// <param name="dateTime"></param>
         /// <param name="status"></param>
         /// <param name="tourId"></param>
-        public Excursion(Guid id, DateTime dateTime, bool status, Guid tourId) : base(id)
+        /// <param name="roleId"></param>
+        public Excursion(Guid id, DateTime dateTime, bool status, Guid tourId, Guid roleId) : base(id)
         {
             DateTime = dateTime;
             Status = status;
             TourId = tourId;
+            RoleId = roleId;
         }
 
         /// <summary>
@@ -58,5 +60,10 @@ namespace ToursSoft.Data.Models
         /// link on tour table
         /// </summary>
         public virtual Tour Tour { get; set; }
+        
+        public Guid RoleId { get; set; }
+        
+        [ForeignKey("RoleId")]
+        public virtual Role Role { get; set; }
     }
 }

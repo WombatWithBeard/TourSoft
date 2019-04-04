@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ToursSoft.Data.Contexts;
@@ -39,6 +40,7 @@ namespace ToursSoft.Controllers
         /// <param name="excursionsId"></param>
         /// <returns></returns>
         [HttpDelete]
+        [Authorize(Roles = "admin")] //TODO:CHECK
         public async Task<IActionResult> Delete([FromBody] List<Excursion> excursionsId)
         {
             try
@@ -69,31 +71,23 @@ namespace ToursSoft.Controllers
         /// <param name="excursion"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpPut("ChangeStatus")]
+        [Authorize(Roles = "admin")] //TODO:CHECK
         public IActionResult ChangeStatus([FromBody] Excursion excursion)
         {
             //TODO: make scheduler for status, i think
             try
-            {
-                if (User.IsInRole("admin"))
+            {                    
+                var status = _context.Excursions.FirstOrDefault(x => x.Id == excursion.Id);
+                if (status != null && status.Status)
                 {
-                    
-                    var status = _context.Excursions.FirstOrDefault(x => x.Id == excursion.Id);
-                    if (status != null && status.Status)
-                    {
-                        status.Status = false;
-                    }
-                    else if (status != null && status.Status == false)
-                    {
-                        status.Status = true;
-                    }
-                    
-                    _context.SaveChanges();
+                    status.Status = false;
                 }
-                else
+                else if (status != null && status.Status == false)
                 {
-                    _logger.LogWarning("Access denied for user: {0}", User.Identity.Name);
-                    return Forbid("Access denied");
+                    status.Status = true;
                 }
+                
+                _context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -118,19 +112,23 @@ namespace ToursSoft.Controllers
                 if (User.IsInRole("admin"))
                 {
                     result = JsonConvert.SerializeObject(_context.Excursions
+                        .Include(e => e.Role)
+                        .Include(e => e.Tour)
                         .Select(x => new
                         {
                             x.DateTime,
                             x.Status,
-                            x.Tour.Name,
+                            TourName = x.Tour.Name,
                             x.Tour.Capacity,
+                            RoleName = x.Role.Name,
+                            x.Role.Description,
                             currentcapacity = _context.GetExcursionGroupsCapacity(x.Id),
                             x.Id
                         }));
                 }
                 else
                 {
-                    result = JsonConvert.SerializeObject(_context.Excursions.Where(s => s.Status)
+                    result = JsonConvert.SerializeObject(_context.Excursions.Where(s => s.Status && User.IsInRole(s.Role.Name))
                         .Select(x => new
                         {
                             x.DateTime,
@@ -153,20 +151,18 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Update info about excursion
         /// </summary>
-        /// <param name="excursions"></param>
+        /// <param name="excursion"></param>
         /// <returns></returns>
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] List<Excursion> excursions)
+        [Authorize(Roles = "admin")] //TODO:CHECK
+        public async Task<IActionResult> Update([FromBody] Excursion excursion)
         {
             try
             {
                 if (User.IsInRole("admin"))
                 {
-                    foreach (var excursion in excursions)
-                    {
-                        _logger.LogInformation("Try to update excursion: {0}", excursion.Id);
-                        _context.Excursions.Update(excursion);
-                    }
+                    _logger.LogInformation("Try to update excursion: {0}", excursion.Id);
+                    _context.Excursions.Update(excursion);
                     await _context.SaveChangesAsync();  
                 }
                 else
@@ -190,27 +186,18 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Creating new excursion
         /// </summary>
-        /// <param name="excursions">excursion info</param>
+        /// <param name="excursion">excursion info</param>
         /// <returns>Ok, or bad request</returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<Excursion> excursions)
+        [Authorize(Roles = "admin")] //TODO:CHECK
+        public async Task<IActionResult> Add([FromBody] Excursion excursion)
         {
             try
             {
-                if (User.IsInRole("admin"))
-                {
-                    foreach (var excursion in excursions)
-                    {
-                        _logger.LogInformation("Try to add new excursion");
-                        await _context.Excursions.AddAsync(excursion);
-                    }
-                    await _context.SaveChangesAsync(); 
-                }
-                else
-                {
-                    _logger.LogWarning("Access denied for user: {0}", User.Identity.Name);
-                    return Forbid("Access denied");
-                }
+
+                _logger.LogInformation("Try to add new excursion");
+                await _context.Excursions.AddAsync(excursion);
+                await _context.SaveChangesAsync(); 
             }
             catch (Exception e)
             {

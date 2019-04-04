@@ -151,13 +151,21 @@ namespace ToursSoft.Data.Contexts
         public int GetExcursionGroupsCapacity(Guid excursionId)
         {
             var sum = 0;
-            
-            foreach (var eg in ExcursionGroups.Where(eg => eg.ExcursionId == excursionId))
-            {
-                //TODO: do it beautiful
-                sum += eg.GetCapacity(this);
-            }
 
+            try
+            {
+                foreach (var eg in ExcursionGroups.Where(eg => eg.ExcursionId == excursionId))
+                {
+                    //TODO: do it beautiful
+                    sum += eg.GetCapacity(this);
+                }
+
+            }
+            catch (Exception e)
+            {
+                return sum;
+            }
+            
             return sum;
         }
      }
