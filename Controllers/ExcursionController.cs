@@ -128,6 +128,7 @@ namespace ToursSoft.Controllers
                 }
                 else
                 {
+                    //TODO:check other roles
                     result = JsonConvert.SerializeObject(_context.Excursions.Where(s => s.Status && User.IsInRole(s.Role.Name))
                         .Select(x => new
                         {
