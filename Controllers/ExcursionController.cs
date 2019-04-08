@@ -71,7 +71,7 @@ namespace ToursSoft.Controllers
         /// <param name="excursion"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpPut("ChangeStatus")]
-        [Authorize(Roles = "admin")] //TODO:CHECK
+        [Authorize(Roles = "admin")]
         public IActionResult ChangeStatus([FromBody] Excursion excursion)
         {
             //TODO: make scheduler for status, i think

@@ -86,7 +86,7 @@ namespace ToursSoft.Controllers
         private ClaimsIdentity GetIdentity(LoginModel model)
         {
             var pass = Convert.ToBase64String(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(model.Password)));
-            var user = _context.Users.FirstOrDefault(u => u.Login == model.Login && u.Password == pass);
+            var user = _context.Users.FirstOrDefault(u => string.Equals(u.Login.ToLower(), model.Login.ToLower(), StringComparison.CurrentCultureIgnoreCase) && u.Password == pass);
             if (user == null) return null; // if we cant find user
             
             var claims = new List<Claim> {new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)};
@@ -94,7 +94,7 @@ namespace ToursSoft.Controllers
             foreach (var userRole in _context.UserRoles.Include(ur => ur.Role)
                 .Where(ur => ur.UserId == user.Id))
             {
-                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, userRole.Role.Name));
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, userRole.Role.Name.ToLower()));
             }
                     
             var claimsIdentity = new ClaimsIdentity(claims, "Token", 
