@@ -11,7 +11,6 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
-    /// <inheritdoc />
     /// <summary>
     /// Hotel controller with CRUD
     /// </summary>

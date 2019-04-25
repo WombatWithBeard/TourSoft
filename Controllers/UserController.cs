@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 
 namespace ToursSoft.Controllers
 {
-    /// <inheritdoc />
     /// <summary>
     /// User controller with CRUD
     /// </summary>

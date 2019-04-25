@@ -4,14 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models
 {
-    /// <inheritdoc />
     /// <summary>
     /// Hotel class: all info about hotels. using with excursion group persons
     /// </summary>
     [Table("Hotel")]
     public class Hotel: Model
     {
-        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>

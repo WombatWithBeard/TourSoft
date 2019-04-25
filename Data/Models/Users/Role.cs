@@ -10,7 +10,6 @@ namespace ToursSoft.Data.Models.Users
     [Table("Role")]
     public class Role: Model
     {
-        /// <inheritdoc />
         /// <summary>
         /// </summary>
         /// <param name="id"></param>

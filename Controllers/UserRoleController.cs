@@ -12,7 +12,6 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Controllers
 {
-    /// <inheritdoc />
     /// <summary>
     /// User role controller with CRUD
     /// </summary>

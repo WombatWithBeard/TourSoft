@@ -5,7 +5,6 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Data.Models
 {
-    /// <inheritdoc />
     /// <summary>
     /// Tourprice class: this class about price of different tours of specific user 
     /// </summary>

@@ -21,7 +21,6 @@ using ToursSoft.ViewModels;
 
 namespace ToursSoft.Controllers
 {
-    /// <inheritdoc />
     /// <summary>
     /// Account controller, with login, authorisation and logout functions
     /// </summary>

@@ -11,7 +11,6 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Controllers
 {
-    /// <inheritdoc />
     /// <summary>
     /// Excursion group controller with CRUD
     /// </summary>
@@ -36,7 +35,7 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Get info about excursion groups
         /// </summary>
-        /// <param name="excursion"></param>
+        /// <param name="excursionid"></param>
         /// <returns></returns>
         [HttpGet]
         public IActionResult Get([FromBody] Excursion excursion)

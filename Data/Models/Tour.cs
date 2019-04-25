@@ -4,14 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models
 {
-    /// <inheritdoc />
     /// <summary>
     /// Tour class: this class about info of tours
     /// </summary>
     [Table("Tour")]
     public class Tour: Model
     {
-        /// <inheritdoc />
         /// <summary>
         /// </summary>
         /// <param name="id"></param>

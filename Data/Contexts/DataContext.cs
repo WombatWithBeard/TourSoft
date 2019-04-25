@@ -58,7 +58,6 @@ namespace ToursSoft.Data.Contexts
         /// </summary>
         public DbSet<UserRole> UserRoles { get; set; }
 
-        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>
@@ -67,7 +66,6 @@ namespace ToursSoft.Data.Contexts
         {
         }
          
-        /// <inheritdoc />
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -75,7 +73,6 @@ namespace ToursSoft.Data.Contexts
         {
         }
 
-        /// <inheritdoc />
         /// <summary>
         /// Default on model creating, make tabels and seed admin role
         /// </summary>

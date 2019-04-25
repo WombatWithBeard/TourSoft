@@ -6,7 +6,6 @@ using ToursSoft.Data.Contexts;
 
 namespace ToursSoft.Data.Models.Users
 {
-    /// <inheritdoc />
     /// <summary>
     /// Excursion group class: class whos connecting user, their persons(group) and specific excursion
     /// </summary>

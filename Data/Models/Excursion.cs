@@ -6,7 +6,6 @@ using ToursSoft.Data.Models.Users;
 
 namespace ToursSoft.Data.Models
 {
-    /// <inheritdoc />
     /// <summary>
     /// Excursion class: excursion is the "Tour" in specific date and time
     /// </summary>

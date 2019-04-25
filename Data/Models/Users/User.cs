@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 
 namespace ToursSoft.Data.Models.Users
 {
-    /// <inheritdoc />
     /// <summary>
     /// User class: info about soft user
     /// </summary>
@@ -14,9 +13,7 @@ namespace ToursSoft.Data.Models.Users
     public class User: Model
     {
         private string _password;
-
         
-        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>

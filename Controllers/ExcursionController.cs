@@ -12,7 +12,6 @@ using ToursSoft.Data.Models;
 
 namespace ToursSoft.Controllers
 {
-    /// <inheritdoc />
     /// <summary>
     /// Excursion controller with CRUD
     /// </summary>

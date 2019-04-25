@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ToursSoft.Data.Models.Users
 {
-    /// <inheritdoc />
     /// <summary>
     /// Person class: info about group of people, who wants to get excursion
     /// </summary>
