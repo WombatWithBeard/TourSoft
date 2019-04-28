@@ -47,8 +47,6 @@ namespace ToursSoft.Data.Models
         [Required]
         public bool Status { get; set; }
 
-        public string Type { get; set; }
-
         /// <summary>
         /// Tour link
         /// </summary>
@@ -60,6 +58,9 @@ namespace ToursSoft.Data.Models
         /// </summary>
         public virtual Tour Tour { get; set; }
         
+        /// <summary>
+        /// Role link
+        /// </summary>
         public Guid RoleId { get; set; }
         
         [ForeignKey("RoleId")]

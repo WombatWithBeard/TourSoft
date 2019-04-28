@@ -72,7 +72,9 @@ namespace ToursSoft.Controllers
             var response = new
             {
                 access_token = encodedJwt,
-                login = identity.Name
+                login = identity.Name,
+                userid = _context.Users.FirstOrDefault(u => u.Login == model.Login).Id
+                
             };
  
             // serializing response
