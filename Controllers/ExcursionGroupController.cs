@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Pages.Account.Manage.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ToursSoft.Data.Contexts;
 using ToursSoft.Data.Models;
@@ -38,25 +40,27 @@ namespace ToursSoft.Controllers
         /// <param name="excursionid"></param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get([FromBody] Excursion excursion)
+        public IActionResult Get(Guid excursionid)
         {
             try
             {
                 object result;
                 if (User.IsInRole("admin"))
                 {
-                    result = _context.ExcursionGroups.Where(e => e.ExcursionId == excursion.Id)
+                    result = _context.ExcursionGroups
+                        .Where(e => e.ExcursionId == excursionid)
                         .Select(x => new
                         {
                             x.User.Name,
                             x.Person,
+                            HotelName = x.Person.Hotel.Name,
                             x.Id
                         });
                 }
                 else
                 {
-                    result = _context.ExcursionGroups.Where(e => e.ExcursionId == excursion.Id && 
-                                                                     e.User.Login == User.Identity.Name)
+                    result = _context.ExcursionGroups
+                        .Where(e => e.ExcursionId == excursionid && e.User.Login == User.Identity.Name)
                         .Select(x => new
                         {
                             x.User.Name,
@@ -70,7 +74,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
         }
 
@@ -113,7 +117,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
 
             _logger.LogWarning("ExcursionGroup was updated by user {0}", User.Identity.Name);
@@ -160,7 +164,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("ExcursionGroup was added by user: {0}", User.Identity.Name);
             return Ok("Excursion group was added to excursion successfully");
@@ -169,28 +173,25 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete excursion group by id
         /// </summary>
-        /// <param name="excursionGroupsId"></param>
+        /// <param name="excursionGroupId"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] List<ExcursionGroup> excursionGroupsId)
+        public async Task<IActionResult> Delete([FromBody] ExcursionGroup excursionGroupId)
         {
             try
             {
-                foreach (var excursionGroupId in excursionGroupsId)
+                var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupId.Id);
+                if (excursionGroup != null)
                 {
-                    var excursionGroup = _context.ExcursionGroups.FirstOrDefault(x => x.Id == excursionGroupId.Id);
-                    if (excursionGroup != null)
-                    {
-                        _logger.LogInformation("Try to delete excursionGroup: {0}", excursionGroup.Id);
-                        _context.ExcursionGroups.Remove(excursionGroup);
-                    }
-                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Try to delete excursionGroup: {0}", excursionGroup.Id);
+                    _context.ExcursionGroups.Remove(excursionGroup);
                 }
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("ExcursionGroup was deleted by user: {0}", User.Identity.Name);
             return Ok("Excursion group was deleted successfully");

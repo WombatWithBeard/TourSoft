@@ -36,29 +36,26 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete excursion by id
         /// </summary>
-        /// <param name="excursionsId"></param>
+        /// <param name="excursionId"></param>
         /// <returns></returns>
         [HttpDelete]
         [Authorize(Roles = "admin")] //TODO:CHECK
-        public async Task<IActionResult> Delete([FromBody] List<Excursion> excursionsId)
+        public async Task<IActionResult> Delete([FromBody] Excursion excursionId)
         {
             try
             {
-                foreach (var excursionid in excursionsId)
+                var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionId.Id);
+                if (excursion != null)
                 {
-                    var excursion = _context.Excursions.FirstOrDefault(x => x.Id == excursionid.Id);
-                    if (excursion != null)
-                    {
-                        _logger.LogInformation("Try to delete excursion: {0}", excursion.Id);
-                        _context.Excursions.Remove(excursion);
-                    }
+                    _logger.LogInformation("Try to delete excursion: {0}", excursion.Id);
+                    _context.Excursions.Remove(excursion);
                 }
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("Excursions was deleted by user: {0}", User.Identity.Name);
             return Ok("Excursion was deleted successfully");
@@ -91,7 +88,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("Status for excursion: {0} was changed by user: {1}", excursion.Id, User.Identity.Name);
             return Ok("Excursion status was changed");
@@ -144,7 +141,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
         }
 
@@ -174,7 +171,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             
             //TODO:
@@ -202,7 +199,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("Excursions was added by user: {0}", User.Identity.Name);
             return Ok("Excursion was added successfully");

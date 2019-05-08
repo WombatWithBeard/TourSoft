@@ -69,7 +69,7 @@ namespace ToursSoft.Data.Models.Users
         {
             //TODO:CHECK again
             var person = context.Persons.FirstOrDefault(p => p.Id == PersonId) ?? Person;
-            return person.BabyCount + person.AdultCount + person.ChildrenCount;
+            return person.AdultCount + person.ChildrenCount;
         }
     }
 }

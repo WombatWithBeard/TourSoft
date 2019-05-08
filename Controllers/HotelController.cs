@@ -57,7 +57,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
 
             _logger.LogInformation("Hotel was updated by user: {0}", User.Identity.Name);
@@ -85,7 +85,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("Hotel was added by user: {0}", User.Identity.Name);
             return Ok("New hotel was added successfully");
@@ -96,6 +96,7 @@ namespace ToursSoft.Controllers
         /// </summary>
         /// <returns>Ok, or bad request</returns>
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get()
         {
             try
@@ -114,7 +115,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
         }
 
@@ -150,7 +151,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("Hotel was deleted by user: {0}", User.Identity.Name);
             return Ok("User was deleted successfully");

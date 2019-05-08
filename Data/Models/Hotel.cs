@@ -8,6 +8,7 @@ namespace ToursSoft.Data.Models
     /// Hotel class: all info about hotels. using with excursion group persons
     /// </summary>
     [Table("Hotel")]
+    //[Serializable]
     public class Hotel: Model
     {
         /// <summary>

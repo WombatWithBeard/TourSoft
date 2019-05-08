@@ -64,7 +64,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             
             _logger.LogInformation("TourPrice was deleted by user: {0}", User.Identity.Name);
@@ -88,7 +88,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
 
             _logger.LogInformation("TourPrice was updated by user: {0}", User.Identity.Name);
@@ -113,7 +113,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("TourPrice was added by user: {0}", User.Identity.Name);
             return Ok("Price was added successfully");

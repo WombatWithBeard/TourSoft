@@ -36,28 +36,25 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete user by id
         /// </summary>
-        /// <param name="usersId"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] List<User> usersId)
+        public async Task<IActionResult> Delete([FromBody] User userId)
         {
             try
             {
-                foreach (var userid in usersId)
+                var user = _context.Users.FirstOrDefault(x => x.Id == userId.Id);
+                if (user != null)
                 {
-                    var user = _context.Users.FirstOrDefault(x => x.Id == userid.Id);
-                    if (user != null)
-                    {
-                        _logger.LogInformation("Try to delete user: {0}", user.Id);
-                        _context.Users.Remove(user);
-                    }
+                    _logger.LogInformation("Try to delete user: {0}", user.Id);
+                    _context.Users.Remove(user);
                 }
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             
             _logger.LogInformation("User was deleted by user: {0}", User.Identity.Name);
@@ -81,7 +78,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
 
             _logger.LogInformation("User was updated by user: {0}", User.Identity.Name);
@@ -109,7 +106,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogWarning("New User was added by user: {0}", User.Identity.Name);
             return Ok("User was added successfully");

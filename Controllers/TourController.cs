@@ -35,28 +35,25 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete tour by id
         /// </summary>
-        /// <param name="toursId"></param>
+        /// <param name="tourId"></param>
         /// <returns>Ok, or bad request</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] List<Tour> toursId)
+        public async Task<IActionResult> Delete([FromBody] Tour tourId)
         {
             try
             {
-                foreach (var tourId in toursId)
+                var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId.Id);
+                if (tour != null)
                 {
-                    var tour = _context.Tours.FirstOrDefault(x => x.Id == tourId.Id);
-                    if (tour != null)
-                    {
-                        _logger.LogInformation("Try to delete tour: {0}", tour.Id);
-                        _context.Tours.Remove(tour);
-                    }
+                    _logger.LogInformation("Try to delete tour: {0}", tour.Id);
+                    _context.Tours.Remove(tour);
                 }
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("Tour was deleted by user: {0}", User.Identity.Name);
             return Ok("Tour was deleted successfully");
@@ -79,7 +76,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
 
             _logger.LogInformation("Tour was updated by user: {0}", User.Identity.Name);
@@ -107,7 +104,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogInformation("Tour was added by user: {0}", User.Identity.Name);
             return Ok("New tour was added successfully");

@@ -36,28 +36,25 @@ namespace ToursSoft.Controllers
         /// <summary>
         /// Delete UserRole by id
         /// </summary>
-        /// <param name="userRoles"></param>
+        /// <param name="userRole"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] List<UserRole> userRoles)
+        public async Task<IActionResult> Delete([FromBody] UserRole userRole)
         {
             try
             {
-                foreach (var userRole in userRoles)
+                var role = _context.UserRoles.FirstOrDefault(x => x.Id == userRole.Id);
+                if (role != null)
                 {
-                    var role = _context.UserRoles.FirstOrDefault(x => x.Id == userRole.Id);
-                    if (role != null)
-                    {
-                        _logger.LogInformation("Try to delete user role: {0}", role.Id);
-                        _context.UserRoles.Remove(role);
-                    }
+                    _logger.LogInformation("Try to delete user role: {0}", role.Id);
+                    _context.UserRoles.Remove(role);
                 }
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             
             _logger.LogInformation("UserRole was deleted by user: {0}", User.Identity.Name);
@@ -81,7 +78,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
 
             _logger.LogInformation("Role was updated by user: {0}", User.Identity.Name);
@@ -110,7 +107,7 @@ namespace ToursSoft.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.ToString());
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
             _logger.LogWarning("New user role was added by user: {0}", User.Identity.Name);
             return Ok("User role was added successfully");
